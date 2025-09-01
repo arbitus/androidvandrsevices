@@ -49,8 +49,8 @@ class CompanySelectFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             if (isInternetAvailable(requireContext())){
                 val response = apiService.PostToken(
-                    username = "fabian",
-                    password = "Zarathustra40"
+                    username = getString(R.string.username),
+                    password = getString(R.string.password)
                 )
 
                 withContext(Dispatchers.Main) {

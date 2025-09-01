@@ -518,7 +518,7 @@ class PaletCreationFragment : Fragment() {
         )
         if (isInternetAvailable(requireContext())) {
             lifecycleScope.launch {
-                val response = apiService.PostToken(username = "fabian", password = "Zarathustra40")
+                val response = apiService.PostToken(username = getString(R.string.username), password = getString(R.string.password))
                 val tokenResponse = response.body()
                 if (response.isSuccessful && tokenResponse != null) {
                     val responsePalet = apiService.createPalet("Bearer ${tokenResponse.access}", paletToJson)

@@ -1,4 +1,7 @@
 <resources>
+    <string name="username">fabian</string>
+    <string name="password">Zarathustra40</string>
+    <string name="api_url">http://10.0.2.2:8000/</string>
     <string name="app_name">VandrServices</string>
     <string name="lot_form_title">Lot</string>
     <string name="lot_number_hint">Ingress Lot Number</string>

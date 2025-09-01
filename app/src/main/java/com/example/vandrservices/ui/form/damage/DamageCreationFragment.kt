@@ -261,7 +261,7 @@ class DamageCreationFragment : Fragment() {
     }
     private fun saveDamage(damageList: List<Triple<String, String, Double>>, paletId: Int) {
         lifecycleScope.launch {
-            val response = apiService.PostToken(username = "fabian", password = "Zarathustra40")
+            val response = apiService.PostToken(username = getString(R.string.username), password = getString(R.string.password))
             val tokenResponse = response.body()
             if (response.isSuccessful && tokenResponse != null) {
                 for (damage in damageList) {
