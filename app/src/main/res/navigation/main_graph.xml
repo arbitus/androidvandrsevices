@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/CompanySelectFragment">
+
+    <fragment
+        android:id="@+id/lotCreationFragment"
+        android:name="com.example.vandrservices.ui.form.lot.LotCreationFragment"
+        android:label="fragment_lot_creation"
+        tools:layout="@layout/fragment_lot_creation" />
+
+    <fragment
+        android:id="@+id/CompanySelectFragment"
+        android:name="com.example.vandrservices.ui.form.company.CompanySelectFragment"
+        android:label="fragment_company_select"
+        tools:layout="@layout/fragment_company_select"/>
+
+    <fragment
+        android:id="@+id/lotListFragment"
+        android:name="com.example.vandrservices.ui.form.lot.LotListFragment"
+        android:label="LotListFragment"
+        tools:layout="@layout/fragment_lot_list"/>
+    <fragment
+        android:id="@+id/paletCreationFragment"
+        android:name="com.example.vandrservices.ui.form.palet.PaletCreationFragment"
+        android:label="fragment_palet_creation"
+        tools:layout="@layout/fragment_palet_creation" />
+    <fragment
+        android:id="@+id/damageCreationFragment"
+        android:name="com.example.vandrservices.ui.form.damage.DamageCreationFragment"
+        android:label="fragment_damage_creation"
+        tools:layout="@layout/fragment_damage_creation" />
+    <fragment
+        android:id="@+id/lotImgFragment"
+        android:name="com.example.vandrservices.ui.form.lot.LotImagesFragment"
+        android:label="LotImgFragment" />
+    <fragment
+        android:id="@+id/paletImagesFragment"
+        android:name="com.example.vandrservices.ui.form.palet.PaletImagesFragment"
+        android:label="PaletImagesFragment" />
+</navigation>

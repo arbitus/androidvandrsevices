@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_package = "com.example.vandrservices";
+option java_multiple_files = true;
+
+message LotEntityProto {
+  string localId = 1;
+  string company = 2;
+  string lotNumber = 3;
+  string arrivalPort = 4;
+  string insPlace = 5;
+  string insDate = 6;
+  string exporter = 7;
+  string invoice = 8;
+  string arvWeek = 9;
+  string origin = 10;
+  string auditor = 11;
+  string cases = 12;
+  string grower = 13;
+  string label = 14;
+  string variety = 15;
+}
+
+message LotListProto {
+  repeated LotEntityProto lots = 1;
+}

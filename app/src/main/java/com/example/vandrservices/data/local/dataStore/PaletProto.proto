@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+option java_package = "com.example.vandrservices.data.local.datastore";
+option java_multiple_files = true;
+
+message PaletEntityProto {
+  string localId = 1;
+  string lotId = 2;
+  string paletNumber = 3;
+  string variedad = 4;
+  string variety = 5;
+  int32 grower = 6;
+  string packageSize = 7;
+  string packDate = 8;
+  string traceability = 9;
+  string ageAtInspection = 10;
+  int32 boxes = 11;
+  string sack = 12;
+  int32 cases = 13;
+  string label = 14;
+  string pressurePSI = 15;
+  string brix = 16;
+  string openAppearance = 17;
+  string internalColor = 18;
+  string externalColor = 19;
+  int32 count = 20;
+  string cat = 21;
+  double weight = 22;
+  double mixdSize = 23;
+  double pulpTemperature = 24;
+  double gradeMaximum = 25;
+  double gradeMinimum = 26;
+  double lengthMaximum = 27;
+  double lengthMinimum = 28;
+  string bloom = 29;
+  string groundColorGreen = 30;
+  string groundColorTurning = 31;
+  string groundColorYellow = 32;
+  string blushAverage = 33;
+  string cblush = 34;
+  string firmnessHard = 35;
+  string firmnessSensitive = 36;
+  string firmnessSoft = 37;
+  string plu = 38;
+  int32 countMin = 39;
+  int32 countMax = 40;
+  double totalQuality = 41;
+  double totalCondition = 42;
+  string qualityColor = 43;
+  string conditionColor = 44;
+  string qualityValue = 45;
+  string conditionValue = 46;
+  int32 c7_8 = 47;
+  int32 c8_9 = 48;
+  int32 c9_10 = 49;
+  int32 c10_11 = 50;
+  int32 c39 = 51;
+  int32 c40_49 = 52;
+  int32 c50 = 53;
+  int32 c2_dedos = 54;
+  int32 c3_dedos = 55;
+  int32 c4_dedos = 56;
+  int32 c5_dedos = 57;
+  int32 c6_dedos = 58;
+  int32 c7_dedos = 59;
+  int32 c8_dedos = 60;
+  int32 c9_dedos = 61;
+  int32 c10_dedos = 62;
+  int32 c11_dedos = 63;
+  string commodity = 64;
+  int32 totalCount = 65;
+}
+message PaletListProto {
+  repeated PaletEntityProto palets = 1;
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/lotImgFragment"
+        android:icon="@drawable/ic_edit"
+        android:title="Lot Images" />
+
+    <item
+        android:id="@+id/CompanySelectFragment"
+        android:icon="@drawable/baseline_add_circle_24"
+        android:title="@string/lot_creation" />
+
+    <item
+        android:id="@+id/paletImagesFragment"
+        android:icon="@drawable/ic_check_list"
+        android:title="Palet Images" />
+</menu>
