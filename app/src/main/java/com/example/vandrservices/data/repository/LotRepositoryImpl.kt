@@ -22,4 +22,8 @@ class LotRepositoryImpl(
     override suspend fun clearLots() {
         dataSource.clearLots()
     }
+    suspend fun deleteLot(localId: String) {
+        dataSource.deleteLot(localId)
+    }
+
 }

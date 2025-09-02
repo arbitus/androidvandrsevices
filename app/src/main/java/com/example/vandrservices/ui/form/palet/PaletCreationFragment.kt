@@ -219,6 +219,7 @@ class PaletCreationFragment : Fragment() {
         containerLayout = view.findViewById(R.id.dynamic_form_container)
         val variety = arguments?.getString("variety") ?: "Banana"
         val lotId = arguments?.getInt("lotId") ?: 0
+        val localLotId = arguments?.getString("localLotId") ?: ""
         val grower = arguments?.getString("grower") ?: ""
         val packDate = arguments?.getString("packDate") ?: ""
         val cases = arguments?.getString("cases") ?: 0
@@ -227,7 +228,7 @@ class PaletCreationFragment : Fragment() {
         retrofit = RetrofitControles.getRetrofit()
         setupForm(variety, grower.toString(), packDate, cases.toString(), label)
         view.findViewById<Button>(R.id.btn_submit).setOnClickListener {
-            savePalet(variety, lotId)
+            savePalet(variety, lotId, localLotId)
         }
 
         observePalets()
@@ -354,7 +355,7 @@ class PaletCreationFragment : Fragment() {
     }
 
 
-    private fun savePalet(variety: String, lotId: Int) {
+    private fun savePalet(variety: String, lotId: Int, localLotId: String) {
         // Helper para leer texto limpio
         fun getText(field: String): String? {
             val value = inputViews[field]?.text?.toString()?.trim()
@@ -379,7 +380,7 @@ class PaletCreationFragment : Fragment() {
 
         val palet = Palet(
             localId = UUID.randomUUID().toString(),
-            lotId = lotId.toString(),
+            lotId = localLotId,
             paletNumber = paletNumber,
             variedad = variety,
             variety = getText("variety"),
@@ -541,17 +542,16 @@ class PaletCreationFragment : Fragment() {
                     }
                 }
             }
+        }else {
+            viewModel.savePalet(palet)
+            val bundle = bundleOf(
+                "variety" to variety,
+                "id" to palet.localId
+            )
+            observePalets()
+            findNavController().navigate(R.id.damageCreationFragment, bundle)
+            Toast.makeText(requireContext(), "Palet guardado correctamente", Toast.LENGTH_SHORT).show()
         }
-        viewModel.savePalet(palet)
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.palets.collect { paletList ->
-                Log.i("vandr model", "Paleta guardados:")
-                paletList.forEach { palet ->
-                    Log.i("vandr model", palet.toString())
-                }
-            }
-        }
-        Toast.makeText(requireContext(), "Palet guardado correctamente", Toast.LENGTH_SHORT).show()
     }
 
     private fun observePalets() {

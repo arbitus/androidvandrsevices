@@ -203,6 +203,7 @@ class LotCreationFragment : Fragment() {
                     "packDate" to binding.etLotInsDate.editText?.text.toString(),
                     "cases" to binding.etLotCases.editText?.text.toString(),
                     "label" to binding.etLotLabel.editText?.text.toString(),
+                    "localLotId" to newData.localId,
                 )
                 Log.i("LotCreateFragment", "Lote bundle id: ${bundle.toString()}")
                 MaterialAlertDialogBuilder(requireContext())

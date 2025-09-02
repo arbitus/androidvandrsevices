@@ -5,7 +5,6 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
 import com.example.vandrservices.LotEntityProto
 import com.example.vandrservices.LotListProto
-import com.example.vandrservices.data.local.dataStore.LotSerializer
 import com.example.vandrservices.data.local.model.LotEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -56,6 +55,13 @@ class LotPreferencesDataSource(private val context: Context) {
     suspend fun clearLots() {
         context.lotDataStore.updateData {
             it.toBuilder().clearLots().build()
+        }
+    }
+
+    suspend fun deleteLot(localId: String) {
+        context.lotDataStore.updateData { proto ->
+            val newList = proto.lotsList.filter { it.localId != localId }
+            proto.toBuilder().clearLots().addAllLots(newList).build()
         }
     }
 }
