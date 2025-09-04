@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,11 +19,14 @@ import com.example.vandrservices.data.ApiService
 import com.example.vandrservices.data.RetrofitControles
 import com.example.vandrservices.domain.model.Damage
 import com.example.vandrservices.domain.model.DamageToJson
+import com.example.vandrservices.domain.model.User
 import com.example.vandrservices.ui.form.isInternetAvailable
+import com.example.vandrservices.ui.login.LoginViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import java.util.UUID
@@ -167,6 +171,8 @@ class DamageCreationFragment : Fragment() {
     private lateinit var containerLayout: LinearLayout
     private lateinit var retrofit: Retrofit
     private val apiService by lazy { retrofit.create(ApiService::class.java) }
+    private val userViewModel: LoginViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -274,9 +280,9 @@ class DamageCreationFragment : Fragment() {
     }
     private fun saveDamage(damageList: List<Triple<String, String, Double>>, paletId: Int) {
         lifecycleScope.launch {
-            val response = apiService.PostToken(username = getString(R.string.username), password = getString(R.string.password))
-            val tokenResponse = response.body()
-            if (response.isSuccessful && tokenResponse != null) {
+            val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
+            val token = user?.token
+            if (!token.isNullOrEmpty()) {
                 for (damage in damageList) {
                     val damageJson = DamageToJson(
                         palet = paletId,
@@ -284,7 +290,7 @@ class DamageCreationFragment : Fragment() {
                         type = damage.second,
                         value = damage.third
                     )
-                    val responseDamage = apiService.createDamage("Bearer ${tokenResponse.access}", damageJson )
+                    val responseDamage = apiService.createDamage("Bearer $token", damageJson )
                     if (responseDamage.isSuccessful) {
                         Log.i("DamageCreate", "Damage enviado correctamente al servidor. id: ${responseDamage.body()}")
                     }

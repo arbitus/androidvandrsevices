@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+option java_package = "com.example.vandrservices";
+option java_multiple_files = true;
+
+message UserEntityProto {
+  string userId = 1;
+  string name = 2;
+  string password = 3;
+  string token = 4;
+}
+
+message UserListProto {
+  repeated UserEntityProto damages = 1;
+}

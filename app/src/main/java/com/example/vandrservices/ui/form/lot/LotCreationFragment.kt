@@ -24,13 +24,16 @@ import com.example.vandrservices.data.RetrofitControles
 import com.example.vandrservices.databinding.FragmentLotCreationBinding
 import com.example.vandrservices.domain.model.Lot
 import com.example.vandrservices.domain.model.LotToJson
+import com.example.vandrservices.domain.model.User
 import com.example.vandrservices.ui.form.company.CompanyAdapter
 import com.example.vandrservices.ui.form.isInternetAvailable
+import com.example.vandrservices.ui.login.LoginViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import java.text.SimpleDateFormat
@@ -50,6 +53,7 @@ class LotCreationFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var retrofit: Retrofit
     private val apiService by lazy { retrofit.create(ApiService::class.java) }
+    private val userViewModel: LoginViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -150,12 +154,11 @@ class LotCreationFragment : Fragment() {
             var lotId: Int = 0
             if (isInternetAvailable(requireContext())) {
                 lifecycleScope.launch {
-                    val response =
-                        apiService.PostToken(username = getString(R.string.username), password = getString(R.string.password))
-                    val tokenResponse = response.body()
-                    if (response.isSuccessful && tokenResponse != null) {
+                    val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
+                    val token = user?.token
+                    if (!token.isNullOrEmpty()) {
                         val responseLot =
-                            apiService.createLot("Bearer ${tokenResponse.access}", data)
+                            apiService.createLot("Bearer $token", data)
                         if (responseLot.isSuccessful) {
                             Log.i(
                                 "LotCreateFragment",
@@ -190,7 +193,7 @@ class LotCreationFragment : Fragment() {
                         lotCreateViewModel.addLot(newData)
                         Log.e(
                             "LotCreateFragment",
-                            "Error al autenticar: ${response.code()}"
+                            "User don't have token"
                         )
                     }
                 }

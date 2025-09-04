@@ -4,21 +4,29 @@ import android.content.Context
 import com.example.vandrservices.data.local.dataStore.DamagePreferencesDataSource
 import com.example.vandrservices.data.local.dataStore.LotPreferencesDataSource
 import com.example.vandrservices.data.local.dataStore.PaletPreferencesDataSource
+import com.example.vandrservices.data.local.dataStore.UserPreferencesDataSource
 import com.example.vandrservices.data.repository.DamageRepositoryImpl
+import com.example.vandrservices.data.repository.LoginRepositoryImpl
 import com.example.vandrservices.data.repository.LotRepositoryImpl
 import com.example.vandrservices.data.repository.PaletRepositoryImpl
+import com.example.vandrservices.data.repository.UserRepositoryImpl
 import com.example.vandrservices.domain.repository.DamageRepository
+import com.example.vandrservices.domain.repository.LoginRepository
 import com.example.vandrservices.domain.repository.LotRepository
 import com.example.vandrservices.domain.repository.PaletRepository
+import com.example.vandrservices.domain.repository.UserRepository
 import com.example.vandrservices.domain.usecase.AddDamageUseCase
 import com.example.vandrservices.domain.usecase.AddLotUseCase
 import com.example.vandrservices.domain.usecase.AddPaletUseCase
+import com.example.vandrservices.domain.usecase.AddUserUseCase
 import com.example.vandrservices.domain.usecase.ClearDamagesUseCase
 import com.example.vandrservices.domain.usecase.ClearLotsUseCase
 import com.example.vandrservices.domain.usecase.ClearPaletsUseCase
 import com.example.vandrservices.domain.usecase.GetDamagesUseCase
 import com.example.vandrservices.domain.usecase.GetLotsUseCase
 import com.example.vandrservices.domain.usecase.GetPaletsUseCase
+import com.example.vandrservices.domain.usecase.GetUserUseCase
+import com.example.vandrservices.domain.usecase.UpdateUserUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -77,4 +85,21 @@ object AppModule {
     @Provides fun provideAddDamageUseCase(repository: DamageRepository) = AddDamageUseCase(repository)
     @Provides fun provideGetDamagesUseCase(repository: DamageRepository) = GetDamagesUseCase(repository)
     @Provides fun provideClearDamagesUseCase(repository: DamageRepository) = ClearDamagesUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideUserPreferencesDataSource(
+        @ApplicationContext context: Context
+    ): UserPreferencesDataSource {
+        return UserPreferencesDataSource(context)
+    }
+
+    @Provides @Singleton
+    fun provideUserRepository(dataSource: UserPreferencesDataSource): UserRepository =
+        UserRepositoryImpl(dataSource)
+
+    @Provides fun provideAddUserUseCase(repository: UserRepository) = AddUserUseCase(repository)
+    @Provides fun provideGetUserUseCase(repository: UserRepository) = GetUserUseCase(repository)
+    @Provides fun provideUpdateUserUseCase(repository: UserRepository) = UpdateUserUseCase(repository)
+
 }

@@ -10,6 +10,7 @@ import com.example.vandrservices.data.CompanyResponse
 import com.example.vandrservices.data.CompanyUI
 import com.example.vandrservices.databinding.ItemCompanyBinding
 import com.squareup.picasso.Picasso
+import kotlinx.coroutines.flow.Flow
 
 class CompanyViewHolder(view: View): RecyclerView.ViewHolder(view) {
     private val ivImage: ImageView = view.findViewById(R.id.ivImageCompany)

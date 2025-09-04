@@ -23,6 +23,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
     buildTypes {
         release {
@@ -62,6 +63,9 @@ dependencies {
     //DaggerHilt
     implementation(libs.hilt.android)
     implementation (libs.github.glide)
+    implementation(libs.androidx.annotation)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

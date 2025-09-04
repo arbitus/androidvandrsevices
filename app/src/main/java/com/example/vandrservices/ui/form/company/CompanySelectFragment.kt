@@ -6,21 +6,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.vandrservices.R
 import com.example.vandrservices.data.ApiService
-import com.example.vandrservices.data.CompanyResponse
 import com.example.vandrservices.data.CompanyUI
 import com.example.vandrservices.data.RetrofitControles
 import com.example.vandrservices.databinding.FragmentCompanySelectBinding
+import com.example.vandrservices.domain.model.User
 import com.example.vandrservices.ui.form.isInternetAvailable
+import com.example.vandrservices.ui.login.LoginViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
-
 
 class CompanySelectFragment : Fragment() {
 
@@ -29,6 +31,9 @@ class CompanySelectFragment : Fragment() {
 
     private lateinit var retrofit: Retrofit
     private lateinit var adapter: CompanyAdapter
+
+    private val userViewModel: LoginViewModel by activityViewModels()
+
     private val apiService by lazy { retrofit.create(ApiService::class.java) }
 
     override fun onCreateView(
@@ -47,56 +52,44 @@ class CompanySelectFragment : Fragment() {
         binding.companyRecicleView.adapter = adapter
 
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
-            if (isInternetAvailable(requireContext())){
-                val response = apiService.PostToken(
-                    username = getString(R.string.username),
-                    password = getString(R.string.password)
-                )
+            if (isInternetAvailable(requireContext())) {
+                // Obtén el usuario guardado y su token
+                val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
+                val token = user?.token
 
-                withContext(Dispatchers.Main) {
-                    if (response.isSuccessful) {
-                        val tokenResponse = response.body()
-                        if (tokenResponse != null) {
-                            Log.i("vandrservices", "Token recibido: ${tokenResponse.access}")
-                            val responseCompanys =
-                                apiService.getCompanys("Bearer ${tokenResponse.access}")
-
-                            if (responseCompanys.isSuccessful) {
-                                val companyList = responseCompanys.body() ?: emptyList()
-
-                                val uiList = companyList.map { company ->
-                                    val cleanUrl = company.url
-                                        ?.replaceFirst("^https://https://".toRegex(), "https://")
-                                        ?.replaceFirst("(qd94ebxicome/)\\1".toRegex(), "$1")
-                                        ?: ""
-
-                                    CompanyUI(
-                                        id = company.id,
-                                        name = company.name,
-                                        imageUrl = cleanUrl
-                                    )
-                                }
-
-                                adapter.updateList(uiList)
-                            } else {
-                                Log.e("vandrservices", "Error en getCompanys: ${responseCompanys.errorBody()?.string()}")
-                                loadOfflineCompanies()
+                if (!token.isNullOrEmpty()) {
+                    val responseCompanys = apiService.getCompanys("Bearer $token")
+                    withContext(Dispatchers.Main) {
+                        if (responseCompanys.isSuccessful) {
+                            val companyList = responseCompanys.body() ?: emptyList()
+                            val uiList = companyList.map { company ->
+                                val cleanUrl = company.url
+                                    ?.replaceFirst("^https://https://".toRegex(), "https://")
+                                    ?.replaceFirst("(qd94ebxicome/)\\1".toRegex(), "$1")
+                                    ?: ""
+                                CompanyUI(
+                                    id = company.id,
+                                    name = company.name,
+                                    imageUrl = cleanUrl
+                                )
                             }
+                            adapter.updateList(uiList)
                         } else {
-                            Log.e("vandrservices", "Respuesta sin cuerpo")
+                            Log.e("vandrservices", "Error en getCompanys: ${responseCompanys.errorBody()?.string()}")
                             loadOfflineCompanies()
                         }
-                    } else {
-                        Log.e("vandrservices", "Error HTTP: ${response.code()} - ${response.message()}")
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        Log.e("vandrservices", "No se encontró token guardado en usuario.")
                         loadOfflineCompanies()
                     }
                 }
-            }else{
+            } else {
                 withContext(Dispatchers.Main) {
                     loadOfflineCompanies()
                 }
             }
-
         }
     }
 

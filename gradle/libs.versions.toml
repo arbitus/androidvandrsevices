@@ -18,6 +18,9 @@ navVersion = "2.9.3"
 protobufJavalite = "3.24.4"
 retrofit = "2.9.0"
 squareupPicasso = "2.8"
+annotation = "1.9.1"
+lifecycleLivedataKtx = "2.9.2"
+lifecycleViewmodelKtx = "2.9.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -40,6 +43,9 @@ material-v1110 = { module = "com.google.android.material:material", version.ref 
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobufJavalite" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 squareup-picasso = { module = "com.squareup.picasso:picasso", version.ref = "squareupPicasso" }
+androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

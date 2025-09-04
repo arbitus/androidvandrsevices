@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,13 +24,16 @@ import com.example.vandrservices.data.ApiService
 import com.example.vandrservices.data.RetrofitControles
 import com.example.vandrservices.domain.model.Palet
 import com.example.vandrservices.domain.model.PaletToJson
+import com.example.vandrservices.domain.model.User
 import com.example.vandrservices.ui.form.isInternetAvailable
+import com.example.vandrservices.ui.login.LoginViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -210,6 +214,7 @@ class PaletCreationFragment : Fragment() {
     )
 
     private val inputViews = mutableMapOf<String, EditText>()
+    private val userViewModel: LoginViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -519,10 +524,10 @@ class PaletCreationFragment : Fragment() {
         )
         if (isInternetAvailable(requireContext())) {
             lifecycleScope.launch {
-                val response = apiService.PostToken(username = getString(R.string.username), password = getString(R.string.password))
-                val tokenResponse = response.body()
-                if (response.isSuccessful && tokenResponse != null) {
-                    val responsePalet = apiService.createPalet("Bearer ${tokenResponse.access}", paletToJson)
+                val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
+                val token = user?.token
+                if (!token.isNullOrEmpty()) {
+                    val responsePalet = apiService.createPalet("Bearer $token", paletToJson)
                     if (responsePalet.isSuccessful) {
                         Log.i("PaletCreateFragment", "Palet enviado correctamente al servidor. id: ${responsePalet.body()?.id}")
                         var paletId = responsePalet.body()?.id ?: 0
