@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.example.vandrservices";
+option java_multiple_files = true;
+
+message DamageEntityProto {
+  string localId = 1;
+  int32 palet = 2;
+  string name = 3;
+  string type = 4;
+  double value = 5;
+}
+
+message DamageListProto {
+  repeated DamageEntityProto damages = 1;
+}

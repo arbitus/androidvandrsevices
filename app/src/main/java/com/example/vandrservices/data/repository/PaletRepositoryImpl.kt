@@ -3,7 +3,6 @@ package com.example.vandrservices.data.repository
 import com.example.vandrservices.data.local.dataStore.PaletPreferencesDataSource
 import com.example.vandrservices.data.mapper.toDomain
 import com.example.vandrservices.data.mapper.toEntity
-import com.example.vandrservices.domain.model.Lot
 import com.example.vandrservices.domain.model.Palet
 import com.example.vandrservices.domain.repository.PaletRepository
 import kotlinx.coroutines.flow.Flow

@@ -379,7 +379,7 @@ class PaletCreationFragment : Fragment() {
         }
 
         val palet = Palet(
-            localId = UUID.randomUUID().toString(),
+            localId = (0..Int.MAX_VALUE).random().toString(),
             lotId = localLotId,
             paletNumber = paletNumber,
             variedad = variety,
@@ -548,6 +548,7 @@ class PaletCreationFragment : Fragment() {
                 "variety" to variety,
                 "id" to palet.localId
             )
+            Log.i("PaletCreateFragment", "Palet guardado correctamente con id: ${palet.localId}")
             observePalets()
             findNavController().navigate(R.id.damageCreationFragment, bundle)
             Toast.makeText(requireContext(), "Palet guardado correctamente", Toast.LENGTH_SHORT).show()

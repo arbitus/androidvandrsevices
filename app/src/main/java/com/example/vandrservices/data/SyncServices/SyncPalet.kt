@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.Log
 import com.example.vandrservices.data.ApiService
 import com.example.vandrservices.data.RetrofitControles
-import com.example.vandrservices.data.local.dataStore.LotPreferencesDataSource
 import com.example.vandrservices.data.local.dataStore.PaletPreferencesDataSource
+import com.example.vandrservices.data.SyncServices.SyncDamage.Companion.syncDamages
 import com.example.vandrservices.domain.model.PaletToJson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -116,6 +116,7 @@ class SyncPalet {
                             )
                             if (response.isSuccessful && response.body()?.id != null) {
                                 // Elimina el palet local si fue exitoso
+                                response.body()!!.id?.let { syncDamages(context, localPalet.localId , it) }
                                 paletPreferencesDataSource.deletePalet(localPalet.localId)
                                 Log.i(
                                     "NetworkMonitor",

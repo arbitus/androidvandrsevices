@@ -10,19 +10,28 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.vandrservices.R
 import com.example.vandrservices.data.ApiService
 import com.example.vandrservices.data.RetrofitControles
+import com.example.vandrservices.domain.model.Damage
 import com.example.vandrservices.domain.model.DamageToJson
 import com.example.vandrservices.ui.form.isInternetAvailable
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
+import java.util.UUID
 
+@AndroidEntryPoint
 class DamageCreationFragment : Fragment() {
+
+
+
     private val fieldsByFruit = mapOf(
         "Banana" to listOf(
             DamageField("Scars", DamageType.QUALITY),
@@ -154,7 +163,7 @@ class DamageCreationFragment : Fragment() {
             }
         }
     }
-
+    private val viewModel: DamageCreationViewModel by viewModels<DamageCreationViewModel>()
     private lateinit var containerLayout: LinearLayout
     private lateinit var retrofit: Retrofit
     private val apiService by lazy { retrofit.create(ApiService::class.java) }
@@ -166,7 +175,8 @@ class DamageCreationFragment : Fragment() {
         containerLayout = root.findViewById(R.id.dynamic_form_container)
 
         val fruitName = arguments?.getString(ARG_FRUIT)
-        val paletId = arguments?.getInt("id")?: 0
+        val paletIdString = arguments?.getString("id")?: "0"
+        val paletId = paletIdString.toIntOrNull()?: 0
         val fields = fieldsByFruit[fruitName] ?: emptyList()
         Log.i("fruit name", fields.toString())
         Log.i("palet Id", paletId.toString())
@@ -176,7 +186,10 @@ class DamageCreationFragment : Fragment() {
             val damages = readFormData()
             if (isInternetAvailable(requireContext())) {
                 saveDamage(damages, paletId)
+            }else{
+                saveDamageLocal(damages, paletId)
             }
+            observeDamages()
         }
         return root
     }
@@ -283,6 +296,29 @@ class DamageCreationFragment : Fragment() {
                         dialog.dismiss()
                         findNavController().navigate(R.id.CompanySelectFragment)
                     }.show()
+            }
+        }
+    }
+    private fun saveDamageLocal(damageList: List<Triple<String, String, Double>>, paletId: Int) {
+        // Lógica para guardar los Damage en la base de datos local
+        for (damage in damageList) {
+            val damageToSave = Damage(
+                localId = "${UUID.randomUUID()}",
+                palet = paletId,
+                name = damage.first,
+                type = damage.second,
+                value = damage.third,
+            )
+
+            viewModel.saveDamage(damageToSave)
+
+        }
+    }
+
+    private fun observeDamages() {
+        lifecycleScope.launch {
+            viewModel.damage.collectLatest { damages ->
+                Log.i("DamageFragment", "Damages almacenados: $damages")
             }
         }
     }
