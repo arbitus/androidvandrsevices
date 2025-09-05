@@ -2,7 +2,6 @@ package com.example.vandrservices.ui.form.lot
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,22 +25,15 @@ import com.example.vandrservices.domain.model.Lot
 import com.example.vandrservices.domain.model.LotToJson
 import com.example.vandrservices.domain.model.User
 import com.example.vandrservices.ui.form.Util.getLotAutofill
-import com.example.vandrservices.ui.form.company.CompanyAdapter
 import com.example.vandrservices.ui.form.isInternetAvailable
 import com.example.vandrservices.ui.login.LoginViewModel
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import retrofit2.Retrofit
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
 import java.util.UUID
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
@@ -56,208 +48,192 @@ class LotCreationFragment : Fragment() {
     private val apiService by lazy { retrofit.create(ApiService::class.java) }
     private val userViewModel: LoginViewModel by activityViewModels()
 
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentLotCreationBinding.inflate(layoutInflater, container, false)
         retrofit = RetrofitControles.getRetrofit()
-        initUI()
+        initUIState()
+        setupDatePicker()
+        setupAutofillDropdown()
+        setupSubmitButton()
+        fillAuditor()
         return binding.root
-
     }
 
-    private fun initUI() {
-        initUIState()
-        val companyId = arguments?.getInt("id")
+    private fun setupDatePicker() {
         val today = MaterialDatePicker.todayInUtcMilliseconds()
         val datePicker = MaterialDatePicker.Builder.datePicker()
-            .setTitleText("pick a date")
+            .setTitleText(getString(R.string.pick_a_date))
             .setSelection(today)
             .build()
 
         binding.etDate.setOnClickListener {
             datePicker.show(parentFragmentManager, "MATERIAL_DATE_PICKER")
         }
-        val formattedDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        formattedDate.timeZone = TimeZone.getDefault()
-        val localCalendar = Calendar.getInstance()
-        binding.etDate.setText(formattedDate.format(localCalendar.time))
+
+        val formattedDate = Utils.getCurrentFormattedDate()
+        binding.etDate.setText(formattedDate)
 
         datePicker.addOnPositiveButtonClickListener { selection ->
-            val localCalendar = Calendar.getInstance()
-            localCalendar.timeInMillis = selection
-            binding.etDate.setText(formattedDate.format(localCalendar.time))}
-        val weekOfYear = localCalendar.get(Calendar.WEEK_OF_YEAR)
-        binding.editTextArvWeek.setText(weekOfYear.toString())
+            binding.etDate.setText(Utils.formatDate(selection))
+        }
+        binding.editTextArvWeek.setText(Utils.getCurrentWeekOfYear().toString())
+    }
 
+
+    private fun setupAutofillDropdown() {
+        binding.dropdown.setOnItemClickListener { _, _, _, _ ->
+            val selectedVariety = binding.dropdown.text.toString()
+            val companyId = arguments?.getInt("id")
+            val autofill = getLotAutofill(selectedVariety, companyId)
+            autofill.exporter?.let { binding.etLotExporter.editText?.setText(it) }
+            autofill.inspectionPlace?.let { binding.etLotInsPlace.editText?.setText(it) }
+            autofill.label?.let { binding.etLotLabel.editText?.setText(it) }
+            autofill.grower?.let { binding.etLotGrower.editText?.setText(it) }
+        }
+    }
+
+    private fun setupSubmitButton() {
+        binding.btnSubmit.setOnClickListener {
+            if (!validateFields()) return@setOnClickListener
+            val companyId = arguments?.getInt("id")
+            val lot = buildLot(companyId)
+            val lotToJson = buildLotToJson(companyId, binding.etLotInsDate.editText?.text.toString())
+            sendLot(lot, lotToJson)
+        }
+    }
+
+    private fun validateFields(): Boolean {
+        var valid = true
+        if (binding.etLotNumber.editText?.text.isNullOrEmpty()) {
+            binding.etLotNumber.error = getString(R.string.field_required)
+            valid = false
+        }
+        if (binding.dropdown.text.isNullOrEmpty()) {
+            binding.dropdown.error = getString(R.string.field_required)
+            valid = false
+        }
+        return valid
+    }
+
+    private fun buildLot(companyId: Int?): Lot {
+        return Lot(
+            localId = UUID.randomUUID().toString(),
+            company = companyId.toString(),
+            lotNumber = binding.etLotNumber.editText?.text.toString(),
+            arrivalPort = binding.etLotArrivalPort.editText?.text.toString(),
+            insPlace = binding.etLotInsPlace.editText?.text.toString(),
+            insDate = binding.etLotInsDate.editText?.text.toString(),
+            exporter = binding.etLotExporter.editText?.text.toString(),
+            invoice = binding.etLotInvoice.editText?.text.toString(),
+            arvWeek = binding.etLotArvWeek.editText?.text.toString(),
+            origin = binding.etLotOrigin.editText?.text.toString(),
+            auditor = binding.etLotAuditor.editText?.text.toString(),
+            cases = binding.etLotCases.editText?.text.toString(),
+            grower = binding.etLotGrower.editText?.text.toString(),
+            label = binding.etLotLabel.editText?.text.toString(),
+            variety = binding.dropdown.text.toString()
+        )
+    }
+
+    private fun buildLotToJson(companyId: Int?, date: String): LotToJson {
+        val apiDate = Utils.formatDateToApi(date)
+        return LotToJson(
+            id = null,
+            arrivalPort = binding.etLotArrivalPort.editText?.text.toString(),
+            arrivalWeek = binding.etLotArvWeek.editText?.text.toString().toIntOrNull(),
+            auditor = binding.etLotAuditor.editText?.text.toString(),
+            cases = binding.etLotCases.editText?.text.toString().toIntOrNull(),
+            company = companyId ?: 0,
+            exporter = binding.etLotExporter.editText?.text.toString(),
+            grower = binding.etLotGrower.editText?.text.toString(),
+            insDate = apiDate,
+            insPlace = binding.etLotInsPlace.editText?.text.toString(),
+            invoice = binding.etLotInvoice.editText?.text.toString(),
+            label = binding.etLotLabel.editText?.text.toString(),
+            lotNumber = binding.etLotNumber.editText?.text.toString(),
+            origin = binding.etLotOrigin.editText?.text.toString(),
+            variedad = binding.dropdown.text.toString()
+        )
+    }
+
+    private fun sendLot(newData: Lot, data: LotToJson) {
+        var lotId = 0
+        if (isInternetAvailable(requireContext())) {
+            lifecycleScope.launch {
+                val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
+                val token = user?.token
+                if (!token.isNullOrEmpty()) {
+                    val responseLot = apiService.createLot("Bearer $token", data)
+                    if (responseLot.isSuccessful) {
+                        lotId = responseLot.body()?.id ?: 0
+                        showLotSavedDialog(lotId, localSave = false)
+                    } else {
+                        lotCreateViewModel.addLot(newData)
+                        showError(getString(R.string.server_error))
+                    }
+                }
+            }
+        } else {
+            lotCreateViewModel.addLot(newData)
+            showLotSavedDialog(lotId, localSave = true, localLotId = newData.localId)
+        }
+    }
+
+    private fun showLotSavedDialog(lotId: Int, localSave: Boolean, localLotId: String? = null) {
+        val bundle = bundleOf(
+            "variety" to binding.dropdown.text.toString(),
+            "lotId" to lotId,
+            "grower" to binding.etLotGrower.editText?.text.toString(),
+            "packDate" to binding.etLotInsDate.editText?.text.toString(),
+            "cases" to binding.etLotCases.editText?.text.toString(),
+            "label" to binding.etLotLabel.editText?.text.toString()
+        )
+        if (localSave && localLotId != null) {
+            bundle.putString("localLotId", localLotId)
+        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(getString(R.string.lot_saved_title))
+            .setMessage(
+                if (localSave)
+                    getString(R.string.lot_saved_local)
+                else
+                    getString(R.string.lot_saved_success)
+            )
+            .setPositiveButton(getString(R.string.accept)) { dialog, _ ->
+                dialog.dismiss()
+                findNavController().navigate(R.id.paletCreationFragment, bundle)
+            }.show()
+    }
+
+    private fun showError(message: String) {
+        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+    }
+
+    private fun fillAuditor() {
         lifecycleScope.launch {
             val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
             binding.editTextAuditor.setText(user?.name ?: "")
         }
+    }
 
-
-        binding.dropdown.setOnItemClickListener { parent, view, position, id ->
-            val selectedVariety = binding.dropdown.text.toString()
-            val companyId = arguments?.getInt("id")
-            val autofill = getLotAutofill(selectedVariety, companyId)
-
-            autofill.exporter?.let {
-                binding.etLotExporter.editText?.setText(it)
-            }
-            autofill.inspectionPlace?.let {
-                binding.etLotInsPlace.editText?.setText(it)
-            }
-            autofill.label?.let {
-                binding.etLotLabel.editText?.setText(it)
-            }
-            autofill.grower?.let {
-                binding.etLotGrower.editText?.setText(it)
-            }
-        }
-        binding.btnSubmit.setOnClickListener {
-            val lotNumber = binding.etLotNumber.editText?.text.toString()
-            if (lotNumber.isEmpty()){
-                binding.etLotNumber.error = "Este campo es obligatorio"
-                return@setOnClickListener
-            }
-            val variety = binding.dropdown.text.toString()
-            if (variety.isEmpty()){
-                binding.dropdown.error = "Este campo es obligatorio"
-                return@setOnClickListener
-            }
-            val newData = Lot(
-                localId = UUID.randomUUID().toString(),
-                company = companyId.toString(),
-                lotNumber = binding.etLotNumber.editText?.text.toString(),
-                arrivalPort = binding.etLotArrivalPort.editText?.text.toString(),
-                insPlace = binding.etLotInsPlace.editText?.text.toString(),
-                insDate = binding.etLotInsDate.editText?.text.toString(),
-                exporter = binding.etLotExporter.editText?.text.toString(),
-                invoice = binding.etLotInvoice.editText?.text.toString(),
-                arvWeek = binding.etLotArvWeek.editText?.text.toString(),
-                origin = binding.etLotOrigin.editText?.text.toString(),
-                auditor = binding.etLotAuditor.editText?.text.toString(),
-                cases = binding.etLotCases.editText?.text.toString(),
-                grower = binding.etLotGrower.editText?.text.toString(),
-                label = binding.etLotLabel.editText?.text.toString(),
-                variety = binding.dropdown.text.toString()
-            )
-            var apiDate = binding.etLotInsDate.editText?.text.toString()
-            val inputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-            val parsedDate = inputFormat.parse(apiDate)
-            val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
-            outputFormat.timeZone = TimeZone.getTimeZone("UTC")
-            apiDate = outputFormat.format(parsedDate!!)
-
-            val data = LotToJson(
-                id = null,
-                arrivalPort = binding.etLotArrivalPort.editText?.text.toString(),
-                arrivalWeek = binding.etLotArvWeek.editText?.text.toString().toIntOrNull(),
-                auditor = binding.etLotAuditor.editText?.text.toString(),
-                cases = binding.etLotCases.editText?.text.toString().toIntOrNull(),
-                company = companyId ?: 0,
-                exporter = binding.etLotExporter.editText?.text.toString(),
-                grower = binding.etLotGrower.editText?.text.toString(),
-                insDate = apiDate,
-                insPlace = binding.etLotInsPlace.editText?.text.toString(),
-                invoice = binding.etLotInvoice.editText?.text.toString(),
-                label = binding.etLotLabel.editText?.text.toString(),
-                lotNumber = binding.etLotNumber.editText?.text.toString(),
-                origin = binding.etLotOrigin.editText?.text.toString(),
-                variedad = binding.dropdown.text.toString()
-            )
-
-            var lotId: Int = 0
-            if (isInternetAvailable(requireContext())) {
-                lifecycleScope.launch {
-                    val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
-                    val token = user?.token
-                    if (!token.isNullOrEmpty()) {
-                        val responseLot =
-                            apiService.createLot("Bearer $token", data)
-                        if (responseLot.isSuccessful) {
-                            Log.i(
-                                "LotCreateFragment",
-                                "Lote enviado correctamente al servidor. id: ${responseLot.body()?.id}"
-                            )
-                            lotId = responseLot.body()?.id ?: 0
-                            Log.i("LotCreateFragment", "Lot id: ${lotId}")
-                            val bundle = bundleOf(
-                                "variety" to binding.dropdown.text.toString(),
-                                "lotId" to lotId,
-                                "grower" to binding.etLotGrower.editText?.text.toString(),
-                                "packDate" to binding.etLotInsDate.editText?.text.toString(),
-                                "cases" to binding.etLotCases.editText?.text.toString(),
-                                "label" to binding.etLotLabel.editText?.text.toString(),
-                            )
-                            Log.i("LotCreateFragment", "Lote bundle id: ${bundle.toString()}")
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Lote guardado")
-                                .setMessage("El lote se ha guardado con éxito.")
-                                .setPositiveButton("Aceptar") { dialog, _ ->
-                                    dialog.dismiss()
-                                    findNavController().navigate(R.id.paletCreationFragment, bundle)
-                                }.show()
-                        } else {
-                            lotCreateViewModel.addLot(newData)
-                            Log.e(
-                                "LotCreateFragment",
-                                "Error al enviar lote: ${responseLot.code()}"
-                            )
-                        }
-                    }else{
-                        lotCreateViewModel.addLot(newData)
-                        Log.e(
-                            "LotCreateFragment",
-                            "User don't have token"
-                        )
-                    }
-                }
-            }else{
-                lotCreateViewModel.addLot(newData)
-                val bundle = bundleOf(
-                    "variety" to binding.dropdown.text.toString(),
-                    "lotId" to lotId,
-                    "grower" to binding.etLotGrower.editText?.text.toString(),
-                    "packDate" to binding.etLotInsDate.editText?.text.toString(),
-                    "cases" to binding.etLotCases.editText?.text.toString(),
-                    "label" to binding.etLotLabel.editText?.text.toString(),
-                    "localLotId" to newData.localId,
-                )
-                Log.i("LotCreateFragment", "Lote bundle id: ${bundle.toString()}")
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Lote guardado")
-                    .setMessage("El lote se ha guardado con éxito en la app.")
-                    .setPositiveButton("Aceptar") { dialog, _ ->
-                        dialog.dismiss()
-                        findNavController().navigate(R.id.paletCreationFragment, bundle)
-                    }.show()
-                CoroutineScope(Dispatchers.IO).launch {
-                    lotCreateViewModel.lots.collect { lots ->
-                        Log.i("LotCreateFragment", "Lotes: ${lots.toString()}")
-                    }
+    private fun initUIState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                lotCreateViewModel.varietys.collect { varieties ->
+                    val adapter = ArrayAdapter(
+                        requireContext(),
+                        android.R.layout.simple_dropdown_item_1line,
+                        varieties
+                    )
+                    binding.dropdown.setAdapter(adapter)
+                    binding.dropdown.setOnClickListener { binding.dropdown.showDropDown() }
                 }
             }
         }
     }
-    private fun initUIState() {
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                lotCreateViewModel.varietys.collect{ varietys ->
-                    val adapter = ArrayAdapter(
-                        requireContext(),
-                        android.R.layout.simple_dropdown_item_1line,
-                        varietys
-                    )
-                    binding.dropdown.setAdapter(adapter)
 
-                    binding.dropdown.setOnClickListener {
-                        binding.dropdown.showDropDown()
-                    }
-                }
-            }
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
