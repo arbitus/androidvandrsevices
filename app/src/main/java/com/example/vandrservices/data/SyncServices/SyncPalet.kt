@@ -6,6 +6,7 @@ import com.example.vandrservices.data.ApiService
 import com.example.vandrservices.data.RetrofitControles
 import com.example.vandrservices.data.local.dataStore.PaletPreferencesDataSource
 import com.example.vandrservices.data.SyncServices.SyncDamage.Companion.syncDamages
+import com.example.vandrservices.data.SyncServices.SyncLot.Companion
 import com.example.vandrservices.domain.model.PaletToJson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +19,13 @@ import java.util.TimeZone
 
 class SyncPalet {
     companion object {
+        @Volatile private var isSyncingPalet = false
         fun syncPalet(context: Context, localId: String, lotId: Int? ) {
-            // Lógica para sincronizar los palets
+            if (isSyncingPalet) {
+                Log.w("SyncLot", "Ya se está sincronizando, se ignora este llamado.")
+                return
+            }
+            isSyncingPalet = true
             Log.i(
                 "NetworkMonitor",
                 "Entra a la creacion de palet: ${localId} , ${lotId}"
@@ -131,6 +137,7 @@ class SyncPalet {
                         }
                     }
                 }
+                isSyncingPalet = false
             }
         }
     }

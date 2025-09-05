@@ -18,7 +18,14 @@ import java.util.TimeZone
 
 class SyncLot {
     companion object {
+        @Volatile private var isSyncing = false
+
         fun syncLots(context: Context) {
+            if (isSyncing) {
+                Log.w("SyncLot", "Ya se está sincronizando, se ignora este llamado.")
+                return
+            }
+            isSyncing = true
             val lotPreferencesDataSource = LotPreferencesDataSource(context)
             lateinit var retrofit: Retrofit
             val apiService by lazy { retrofit.create(ApiService::class.java) }
@@ -76,6 +83,7 @@ class SyncLot {
                         }
                     }
                 }
+                isSyncing = false
             }
         }
     }

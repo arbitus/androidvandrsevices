@@ -44,19 +44,19 @@ class LoginActivity : AppCompatActivity() {
             setLoading(true)
             val username = usernameEdit.text.toString()
             val password = passwordEdit.text.toString()
-            viewModel.login(username, password)
-        }
-
-        viewModel.loginResult.observe(this) { success ->
-            setLoading(false)
-            if (success) {
-                val token = viewModel.token.value ?: ""
-                viewModel.updateFirstUserToken(token)
-                goToMain()
-            } else {
-                errorText.text = "No se pudo autenticar usuario"
-                errorText.visibility = View.VISIBLE
+            lifecycleScope.launch {
+                var success = viewModel.login(username, password)
+                if (!success) {
+                    errorText.text = "No se pudo autenticar usuario"
+                    errorText.visibility = View.VISIBLE
+                    setLoading(false)
+                } else {
+                    val token = viewModel.token.value ?: ""
+                    viewModel.updateFirstUserToken(token)
+                    goToMain()
+                }
             }
+
         }
     }
 

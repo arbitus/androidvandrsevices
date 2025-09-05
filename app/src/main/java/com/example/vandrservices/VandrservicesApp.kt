@@ -8,6 +8,7 @@ import com.example.vandrservices.data.SyncServices.SyncLot
 import com.example.vandrservices.data.local.dataStore.DamagePreferencesDataSource
 import com.example.vandrservices.data.local.dataStore.LotPreferencesDataSource
 import com.example.vandrservices.data.local.dataStore.PaletPreferencesDataSource
+import com.example.vandrservices.data.local.dataStore.UserPreferencesDataSource
 import dagger.hilt.android.HiltAndroidApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,10 +29,12 @@ class VandrservicesApp: Application(){
                 //val lotPreferencesDataSource = LotPreferencesDataSource(this)
                 //val paletsPreferencesDataSource = PaletPreferencesDataSource(this)
                 //val damagePreferencesDataSource = DamagePreferencesDataSource(this)
+                //val userPreferencesDataSource = UserPreferencesDataSource(this)
                 //CoroutineScope(Dispatchers.IO).launch {
                 //    lotPreferencesDataSource.clearLots()
                 //    paletsPreferencesDataSource.clearPalets()
                 //    damagePreferencesDataSource.clearDamages()
+                //    userPreferencesDataSource.clearUsers()
                 //}
                 SyncLot.syncLots(this)
             } else {

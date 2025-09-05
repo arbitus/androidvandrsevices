@@ -14,7 +14,13 @@ import retrofit2.Retrofit
 
 class SyncDamage {
     companion object {
+        @Volatile private var isSyncingDamage = false
         fun syncDamages(context: Context, localId: String, paletId: Int) {
+            if (isSyncingDamage) {
+                Log.w("SyncLot", "Ya se está sincronizando, se ignora este llamado.")
+                return
+            }
+            isSyncingDamage = true
             val damagePreferencesDataSource = DamagePreferencesDataSource(context)
             Log.i(
                 "NetworkMonitor",
@@ -58,6 +64,7 @@ class SyncDamage {
                         }
                     }
                 }
+                isSyncingDamage = false
             }
         }
     }

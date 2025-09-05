@@ -58,4 +58,10 @@ class UserPreferencesDataSource(private val context: Context) {
                 .build()
         }
     }
+
+    suspend fun clearUsers() {
+        context.userDataStore.updateData {
+            it.toBuilder().clearUsers().build()
+        }
+    }
 }

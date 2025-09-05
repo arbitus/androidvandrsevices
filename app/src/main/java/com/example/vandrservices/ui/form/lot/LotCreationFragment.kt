@@ -25,6 +25,7 @@ import com.example.vandrservices.databinding.FragmentLotCreationBinding
 import com.example.vandrservices.domain.model.Lot
 import com.example.vandrservices.domain.model.LotToJson
 import com.example.vandrservices.domain.model.User
+import com.example.vandrservices.ui.form.Util.getLotAutofill
 import com.example.vandrservices.ui.form.company.CompanyAdapter
 import com.example.vandrservices.ui.form.isInternetAvailable
 import com.example.vandrservices.ui.login.LoginViewModel
@@ -81,23 +82,40 @@ class LotCreationFragment : Fragment() {
         }
         val formattedDate = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
         formattedDate.timeZone = TimeZone.getDefault()
-        val todayUtc = MaterialDatePicker.todayInUtcMilliseconds()
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.timeInMillis = todayUtc
-        binding.etDate.setText(formattedDate.format(calendar.time))
+        val localCalendar = Calendar.getInstance()
+        binding.etDate.setText(formattedDate.format(localCalendar.time))
 
         datePicker.addOnPositiveButtonClickListener { selection ->
-            // selection = fecha en UTC
-            val selectedCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-            selectedCalendar.timeInMillis = selection
-
-            // Ahora la conviertes a local
             val localCalendar = Calendar.getInstance()
-            localCalendar.timeInMillis = selectedCalendar.timeInMillis
-
+            localCalendar.timeInMillis = selection
             binding.etDate.setText(formattedDate.format(localCalendar.time))}
-        val weekOfYear = calendar.get(Calendar.WEEK_OF_YEAR)
+        val weekOfYear = localCalendar.get(Calendar.WEEK_OF_YEAR)
         binding.editTextArvWeek.setText(weekOfYear.toString())
+
+        lifecycleScope.launch {
+            val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
+            binding.editTextAuditor.setText(user?.name ?: "")
+        }
+
+
+        binding.dropdown.setOnItemClickListener { parent, view, position, id ->
+            val selectedVariety = binding.dropdown.text.toString()
+            val companyId = arguments?.getInt("id")
+            val autofill = getLotAutofill(selectedVariety, companyId)
+
+            autofill.exporter?.let {
+                binding.etLotExporter.editText?.setText(it)
+            }
+            autofill.inspectionPlace?.let {
+                binding.etLotInsPlace.editText?.setText(it)
+            }
+            autofill.label?.let {
+                binding.etLotLabel.editText?.setText(it)
+            }
+            autofill.grower?.let {
+                binding.etLotGrower.editText?.setText(it)
+            }
+        }
         binding.btnSubmit.setOnClickListener {
             val lotNumber = binding.etLotNumber.editText?.text.toString()
             if (lotNumber.isEmpty()){

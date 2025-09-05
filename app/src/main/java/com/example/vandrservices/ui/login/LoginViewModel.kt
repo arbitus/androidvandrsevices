@@ -31,23 +31,30 @@ class LoginViewModel @Inject constructor(
     val usersFlow: Flow<List<User>> = getUserUseCase()
 
     // Login normal
-    fun login(username: String, password: String) {
-        viewModelScope.launch {
+    suspend fun login(username: String, password: String): Boolean {
+        return try {
             _loginResult.value = false
             val token = userRepository.login(username, password)
             Log.d("LoginViewModel", "Token: $token")
-            if (token != "") {
-                _loginResult.value = true
-            }
             _token.value = userRepository.getToken()
-            userRepository.addUser(
-                User(
-                    userId = UUID.randomUUID().toString(),
-                    name = username,
-                    password = password,
-                    token = token
-                )
-            )
+            if (token != "") {
+                userRepository.addUser(
+                    User(
+                        userId = UUID.randomUUID().toString(),
+                        name = username,
+                        password = password,
+                        token = token
+                    ))
+                _loginResult.value = true
+                true
+            } else {
+                _loginResult.value = false
+                false
+            }
+        } catch (e: Exception) {
+            Log.d("LoginViewModel", "Error: $e")
+            _loginResult.value = false
+            false
         }
     }
 
