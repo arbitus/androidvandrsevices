@@ -318,12 +318,10 @@ class PaletCreationFragment : Fragment() {
                             field.contains("lengthMinimum", ignoreCase = true) ||
                             field.contains("pulpTemperature", ignoreCase = true) ->
                         InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-
                     field.contains("date", ignoreCase = true) -> {
                         // Evitar teclado y usar date picker
                         InputType.TYPE_NULL
                     }
-
                     else -> InputType.TYPE_CLASS_TEXT
                 }
                 val growerInt: Int = grower.toIntOrNull() ?: 0
@@ -332,8 +330,11 @@ class PaletCreationFragment : Fragment() {
                         setText(growerInt.toString())
                     field.equals("cases", ignoreCase = true) && cases.toInt() != 0 ->
                         setText(cases)
-                    field.equals("date", ignoreCase = true) && packDate.isNotEmpty() ->
-                        setText(packDate)
+                    field.contains("date", ignoreCase = true) -> {
+                        // SIEMPRE usar la fecha actual
+                        val dateToSet = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+                        setText(dateToSet)
+                    }
                     field.equals("label", ignoreCase = true) && label.isNotEmpty() ->
                         setText(label)
                 }
