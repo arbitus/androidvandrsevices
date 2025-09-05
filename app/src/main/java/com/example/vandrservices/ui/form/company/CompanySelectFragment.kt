@@ -1,7 +1,6 @@
 package com.example.vandrservices.ui.form.company
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,7 +76,6 @@ class CompanySelectFragment : Fragment() {
     private fun loadCompanies(){
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             if (isInternetAvailable(requireContext())) {
-                // Obtén el usuario guardado y su token
                 val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
                 val token = user?.token
 

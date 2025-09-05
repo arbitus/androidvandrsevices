@@ -1,11 +1,9 @@
 package com.example.vandrservices.ui.form.company
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.vandrservices.R
-import com.example.vandrservices.data.CompanyResponse
 import com.example.vandrservices.data.CompanyUI
 
 class CompanyAdapter(
