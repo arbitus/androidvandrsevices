@@ -19,7 +19,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "API_URL", "\"http://10.0.2.2:8000/\"")
+        buildConfigField("String", "API_URL", "\"https://vandservices-af6ea8b693af.herokuapp.com/\"")
     }
     buildFeatures {
         buildConfig = true

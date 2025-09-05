@@ -78,6 +78,7 @@ class LoginActivity : AppCompatActivity() {
                     goToMain()
                 } else {
                     if (user.token != "") {
+                        Log.d("LoginActivity", "To Main with no Login")
                         goToMain()
                     }
                     Log.d("LoginActivity", "Login failed")
