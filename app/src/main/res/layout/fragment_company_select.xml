@@ -6,7 +6,7 @@
     tools:context=".ui.form.company.CompanySelectFragment">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/companyRecicleView"
+        android:id="@+id/companyRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -28,4 +28,21 @@ class CompanyAdapter(
         this.companyList = companyList
         notifyDataSetChanged()
     }
+    fun loadOfflineCompanies() {
+        val offlineList = listOf(
+            CompanyUI(133, "San Jorge", imageRes = R.drawable.san_jorge),
+            CompanyUI(166, "Pure Nature Produce", imageRes = R.drawable.pure_nature),
+            CompanyUI(199, "Dayka Hackett LLC", imageRes = R.drawable.daykahackettfrutura_color),
+            CompanyUI(232, "Frutura Texas", imageRes = R.drawable.frutura_logo),
+            CompanyUI(4, "Ground Fresh International", imageRes = R.drawable.ground_fresh),
+            CompanyUI(3, "Coliman", imageRes = R.drawable.coliman),
+            CompanyUI(1, "Level Berries", imageRes = R.drawable.level_berries),
+            CompanyUI(2, "BST", imageRes = R.drawable.bst),
+            CompanyUI(265, "Produce Nation", imageRes = R.drawable.produce_notion),
+            CompanyUI(70, "Chanitos", imageRes = R.drawable.chanitos),
+            CompanyUI(34, "Ganfer Fresh", imageRes = R.drawable.ganfer),
+            CompanyUI(100, "Farmacopia Farms", imageRes = R.drawable.farmacopia),
+        )
+        updateList(offlineList)
+    }
 }
