@@ -2,6 +2,7 @@ package com.example.vandrservices.ui.form.lot
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -31,8 +32,10 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import java.util.UUID
 
@@ -166,9 +169,10 @@ class LotCreationFragment : Fragment() {
                     val responseLot = apiService.createLot("Bearer $token", data)
                     if (responseLot.isSuccessful) {
                         lotId = responseLot.body()?.id ?: 0
-                        showLotSavedDialog(lotId, localSave = false)
+                        withContext(Dispatchers.Main) {
+                            showLotSavedDialog(lotId, localSave = false)
+                        }
                     } else {
-                        lotCreateViewModel.addLot(newData)
                         showError(getString(R.string.server_error))
                     }
                 }

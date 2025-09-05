@@ -39,12 +39,12 @@ class DamageCreationFragment : Fragment() {
     private val fieldsByFruit = mapOf(
         "Banana" to listOf(
             DamageField("Scars", DamageType.QUALITY),
-            DamageField("Latex", DamageType.CONDITION),
-            DamageField("Healed Wounds", DamageType.CONDITION),
+            DamageField("Latex", DamageType.QUALITY),
+            DamageField("Healed Wounds", DamageType.QUALITY),
             DamageField("Broken Neck", DamageType.CONDITION),
-            DamageField("Skin Abrasion", DamageType.QUALITY),
+            DamageField("Skin Abrasion", DamageType.CONDITION),
             DamageField("Freeze Damage", DamageType.CONDITION),
-            DamageField("Insect Damage", DamageType.QUALITY),
+            DamageField("Insect Damage", DamageType.CONDITION),
             DamageField("Ripe", DamageType.CONDITION),
             DamageField("Mold", DamageType.CONDITION),
             DamageField("Decay", DamageType.CONDITION)
@@ -52,9 +52,9 @@ class DamageCreationFragment : Fragment() {
         "Lemon" to listOf(
             DamageField("Scars / Russet", DamageType.QUALITY),
             DamageField("Oleocellosis", DamageType.QUALITY),
-            DamageField("Misshape", DamageType.CONDITION),
-            DamageField("Sunburn", DamageType.CONDITION),
-            DamageField("Degreening", DamageType.CONDITION),
+            DamageField("Misshape", DamageType.QUALITY),
+            DamageField("Sunburn", DamageType.QUALITY),
+            DamageField("Degreening", DamageType.QUALITY),
             DamageField("Skin Defects", DamageType.QUALITY),
             DamageField("Wounds / Mechanical Damage", DamageType.CONDITION),
             DamageField("Bruises / Soft", DamageType.CONDITION),
@@ -79,13 +79,13 @@ class DamageCreationFragment : Fragment() {
         "Blueberrie" to listOf(
             DamageField("Scars", DamageType.QUALITY),
             DamageField("Immature", DamageType.QUALITY),
-            DamageField("Pulled Stem", DamageType.QUALITY),
-            DamageField("Soft Fruit", DamageType.QUALITY),
-            DamageField("Shrivel", DamageType.QUALITY),
-            DamageField("Leaking", DamageType.QUALITY),
-            DamageField("Overripe", DamageType.QUALITY),
-            DamageField("Mold", DamageType.QUALITY),
-            DamageField("Decay", DamageType.QUALITY)
+            DamageField("Pulled Stem", DamageType.CONDITION),
+            DamageField("Soft Fruit", DamageType.CONDITION),
+            DamageField("Shrivel", DamageType.CONDITION),
+            DamageField("Leaking", DamageType.CONDITION),
+            DamageField("Overripe", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         ),
         "Avocado" to listOf(
             DamageField("Turning Color", DamageType.QUALITY),
@@ -93,13 +93,13 @@ class DamageCreationFragment : Fragment() {
             DamageField("Misshape", DamageType.QUALITY),
             DamageField("Scars / Russet", DamageType.QUALITY),
             DamageField("Surface Discoloration", DamageType.QUALITY),
-            DamageField("Sunburn", DamageType.QUALITY),
-            DamageField("Wounds", DamageType.QUALITY),
-            DamageField("Ripe", DamageType.QUALITY),
-            DamageField("Freeze Damage", DamageType.QUALITY),
-            DamageField("Insect Damage", DamageType.QUALITY),
-            DamageField("Mold", DamageType.QUALITY),
-            DamageField("Decay", DamageType.QUALITY)
+            DamageField("Sunburn", DamageType.CONDITION),
+            DamageField("Wounds", DamageType.CONDITION),
+            DamageField("Ripe", DamageType.CONDITION),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Insect Damage", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         ),
         "Mangoes" to listOf(
             DamageField("Scars", DamageType.QUALITY),
@@ -108,10 +108,10 @@ class DamageCreationFragment : Fragment() {
             DamageField("Sap Burn", DamageType.QUALITY),
             DamageField("Latex", DamageType.QUALITY),
             DamageField("Sunken", DamageType.QUALITY),
-            DamageField("Anthracnose", DamageType.QUALITY),
-            DamageField("Bruises", DamageType.QUALITY),
-            DamageField("Decay", DamageType.QUALITY),
-            DamageField("Immature", DamageType.QUALITY)
+            DamageField("Anthracnose", DamageType.CONDITION),
+            DamageField("Bruises", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION),
+            DamageField("Immature", DamageType.CONDITION)
         ),
         "Peppers" to listOf(
             DamageField("Scars / Russet", DamageType.QUALITY),
@@ -119,27 +119,27 @@ class DamageCreationFragment : Fragment() {
             DamageField("Turning Color", DamageType.QUALITY),
             DamageField("Pulled Stem", DamageType.QUALITY),
             DamageField("Sunburn", DamageType.QUALITY),
-            DamageField("Wounds", DamageType.QUALITY),
-            DamageField("Bruises", DamageType.QUALITY),
-            DamageField("Soft", DamageType.QUALITY),
-            DamageField("Shrivel", DamageType.QUALITY),
-            DamageField("Freeze Damage", DamageType.QUALITY),
-            DamageField("Insect Damage", DamageType.QUALITY),
-            DamageField("Mold", DamageType.QUALITY),
-            DamageField("Decay", DamageType.QUALITY)
+            DamageField("Wounds", DamageType.CONDITION),
+            DamageField("Bruises", DamageType.CONDITION),
+            DamageField("Soft", DamageType.CONDITION),
+            DamageField("Shrivel", DamageType.CONDITION),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Insect Damage", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         ),
         "Raspberries" to listOf(
             DamageField("Broken Cells", DamageType.QUALITY),
             DamageField("White Cells", DamageType.QUALITY),
             DamageField("Water Cells", DamageType.QUALITY),
             DamageField("Immature", DamageType.QUALITY),
-            DamageField("Freeze Damage", DamageType.QUALITY),
-            DamageField("Soft Fruit", DamageType.QUALITY),
-            DamageField("Shrivel", DamageType.QUALITY),
-            DamageField("Leaking", DamageType.QUALITY),
-            DamageField("Overripe", DamageType.QUALITY),
-            DamageField("Mold", DamageType.QUALITY),
-            DamageField("Decay", DamageType.QUALITY)
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Soft Fruit", DamageType.CONDITION),
+            DamageField("Shrivel", DamageType.CONDITION),
+            DamageField("Leaking", DamageType.CONDITION),
+            DamageField("Overripe", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         ),
         "Tomato" to listOf(
             DamageField("Scars / Russet", DamageType.QUALITY),
@@ -148,13 +148,13 @@ class DamageCreationFragment : Fragment() {
             DamageField("Sunburn", DamageType.QUALITY),
             DamageField("Degreening", DamageType.QUALITY),
             DamageField("Skin Defects", DamageType.QUALITY),
-            DamageField("Wounds / Mechanical Damage", DamageType.QUALITY),
-            DamageField("Bruises / Soft", DamageType.QUALITY),
-            DamageField("SEB", DamageType.QUALITY),
-            DamageField("Freeze Damage", DamageType.QUALITY),
-            DamageField("Shrivel", DamageType.QUALITY),
-            DamageField("Mold", DamageType.QUALITY),
-            DamageField("Decay", DamageType.QUALITY)
+            DamageField("Wounds / Mechanical Damage", DamageType.CONDITION),
+            DamageField("Bruises / Soft", DamageType.CONDITION),
+            DamageField("SEB", DamageType.CONDITION),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Shrivel", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         )
     )
 
