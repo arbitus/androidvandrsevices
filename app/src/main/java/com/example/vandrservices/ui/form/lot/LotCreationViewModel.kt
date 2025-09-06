@@ -1,6 +1,7 @@
 package com.example.vandrservices.ui.form.lot
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.example.vandrservices.domain.model.Lot
 import com.example.vandrservices.domain.model.VarietyInfo
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LotCreationViewModel @Inject constructor(private val addLotUseCase: AddLotUseCase, private val getLotsUseCase: GetLotsUseCase) : ViewModel()  {
+class LotCreationViewModel @Inject constructor(private val addLotUseCase: AddLotUseCase, private val getLotsUseCase: GetLotsUseCase, private val savedStateHandle: SavedStateHandle) : ViewModel()  {
     private var _varietys = MutableStateFlow<List<VarietyInfo>>(emptyList())
     val varietys: StateFlow<List<VarietyInfo>> = _varietys
 
@@ -45,5 +46,11 @@ class LotCreationViewModel @Inject constructor(private val addLotUseCase: AddLot
     }
     val lots = getLotsUseCase()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    fun setEmpresaId(id: Int) {
+        savedStateHandle["empresaId"] = id
+    }
+
+    fun getEmpresaId(): Int? = savedStateHandle.get<Int>("empresaId")
 
 }

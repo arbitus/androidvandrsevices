@@ -99,7 +99,11 @@ class LotCreationFragment : Fragment() {
         binding.btnSubmit.setOnClickListener {
             if (!validateFields()) return@setOnClickListener
             val companyId = arguments?.getInt("id")
-            val lot = buildLot(companyId)
+            companyId?.let{
+                lotCreateViewModel.setEmpresaId(it)
+            }
+            val empresaIdPersisted = lotCreateViewModel.getEmpresaId()
+            val lot = buildLot(empresaIdPersisted)
             val lotToJson = buildLotToJson(companyId, binding.etLotInsDate.editText?.text.toString())
             sendLot(lot, lotToJson)
         }

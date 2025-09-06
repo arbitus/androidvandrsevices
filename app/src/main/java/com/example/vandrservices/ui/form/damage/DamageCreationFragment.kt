@@ -180,12 +180,17 @@ class DamageCreationFragment : Fragment() {
         val root = inflater.inflate(R.layout.fragment_damage_creation, container, false)
         containerLayout = root.findViewById(R.id.dynamic_form_container)
 
-        val fruitName = arguments?.getString(ARG_FRUIT)
+        var fruitName = arguments?.getString(ARG_FRUIT)
         val paletIdString = arguments?.getString("id")?: "0"
-        val paletId = paletIdString.toIntOrNull()?: 0
+        var paletId = paletIdString.toIntOrNull()?: 0
+        viewModel.serPaletPersist(fruitName ?: "", paletId)
+        val resultPersist = viewModel.getPaletPersist()
+        fruitName = resultPersist.first
+        paletId = resultPersist.second ?: 0
         val fields = fieldsByFruit[fruitName] ?: emptyList()
         Log.i("fruit name", fields.toString())
         Log.i("palet Id", paletId.toString())
+
         retrofit = RetrofitControles.getRetrofit()
         createDynamicForm(fields)
         root.findViewById<Button>(R.id.btn_submit).setOnClickListener {
@@ -202,9 +207,6 @@ class DamageCreationFragment : Fragment() {
 
     private fun createDynamicForm(fields: List<DamageField>) {
         containerLayout.removeAllViews()
-
-        // Ordenar para que "Mold" siempre sea el primero
-        val orderedFields = fields.sortedBy { if (it.name == "Mold") 0 else 1 }
 
         fields.forEach { damage ->
             val itemLayout = LinearLayout(requireContext()).apply {

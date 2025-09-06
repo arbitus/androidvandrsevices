@@ -80,10 +80,13 @@ class PaletCreationFragment : Fragment() {
         val cases = arguments?.getString("cases") ?: "0"
         val label = arguments?.getString("label") ?: ""
         Log.i("PaletCreationFragment", "variety: $variety, lotId: $lotId, localLotId: $localLotId, grower: $grower, packDate: $packDate, cases: $cases, label: $label")
-        setupForm(variety, grower, packDate, cases, label)
+        viewModel.serLotPersist(variety, lotId, localLotId, grower, packDate, cases, label)
+        val lotPersist = viewModel.getLotPersist()
+
+        setupForm(lotPersist["variety"] as String, lotPersist["grower"] as String, lotPersist["packDate"] as String, lotPersist["cases"] as String, lotPersist["label"] as String)
 
         view.findViewById<Button>(R.id.btn_submit).setOnClickListener {
-            onSubmit(variety, lotId, localLotId)
+            onSubmit(lotPersist["variety"] as String, lotPersist["lotId"] as Int, lotPersist["localLotId"] as String)
         }
 
         observePalets()
@@ -178,7 +181,7 @@ class PaletCreationFragment : Fragment() {
     }
 
     private fun onSubmit(variety: String, lotId: Int, localLotId: String) {
-        val palet = buildPalet(variety, localLotId)
+        val palet = buildPalet( variety, localLotId)
         if (palet == null) {
             showFieldError("El número de palet es obligatorio")
             return

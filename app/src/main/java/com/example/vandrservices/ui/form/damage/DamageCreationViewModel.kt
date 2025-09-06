@@ -1,5 +1,6 @@
 package com.example.vandrservices.ui.form.damage
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.vandrservices.domain.model.Damage
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class DamageCreationViewModel @Inject constructor(
     private val getDamageUseCase: GetDamagesUseCase,
     private val addDamageUseCase: AddDamageUseCase,
+    private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     fun saveDamage(damage: Damage) {
@@ -25,4 +27,18 @@ class DamageCreationViewModel @Inject constructor(
 
     val damage = getDamageUseCase()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+
+    fun serPaletPersist(
+        fruitName: String,
+        paletId: Int
+    ) {
+        savedStateHandle["fruitName"] = fruitName
+        savedStateHandle["paletId"] = paletId
+    }
+
+    fun getPaletPersist(): Pair<String?, Int?> {
+        val fruitName = savedStateHandle.get<String>("fruitName")
+        val paletId = savedStateHandle.get<Int>("paletId")
+        return Pair(fruitName, paletId)
+    }
 }
