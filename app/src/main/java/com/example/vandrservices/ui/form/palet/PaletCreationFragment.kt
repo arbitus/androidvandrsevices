@@ -196,6 +196,7 @@ class PaletCreationFragment : Fragment() {
                     val responsePalet = apiService.createPalet("Bearer $token", paletToJson)
                     if (responsePalet.isSuccessful) {
                         val paletId = responsePalet.body()?.id ?: 0
+                        Log.i("PaletFragment", "Palet creado con ID: $paletId")
                         showSuccessDialog(variety, paletId)
                     } else {
                         showFieldError("Error al enviar palet: ${responsePalet.code()}")
@@ -368,7 +369,7 @@ class PaletCreationFragment : Fragment() {
     }
 
     private fun showSuccessDialog(variety: String, paletId: Any) {
-        val bundle = bundleOf("variety" to variety, "id" to paletId)
+        val bundle = bundleOf("variety" to variety, "id" to paletId.toString())
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Palet guardado")
             .setMessage("El palet se ha guardado con éxito.")

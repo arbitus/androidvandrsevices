@@ -296,6 +296,9 @@ class DamageCreationFragment : Fragment() {
                     if (responseDamage.isSuccessful) {
                         Log.i("DamageCreate", "Damage enviado correctamente al servidor. id: ${responseDamage.body()}")
                     }
+                    else {
+                        Log.e("DamageCreate", "Error al enviar Damage al servidor. Código de respuesta: ${responseDamage.code()}")
+                    }
                 }
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Damages guardado")
@@ -308,7 +311,6 @@ class DamageCreationFragment : Fragment() {
         }
     }
     private fun saveDamageLocal(damageList: List<Triple<String, String, Double>>, paletId: Int) {
-        // Lógica para guardar los Damage en la base de datos local
         for (damage in damageList) {
             val damageToSave = Damage(
                 localId = "${UUID.randomUUID()}",
