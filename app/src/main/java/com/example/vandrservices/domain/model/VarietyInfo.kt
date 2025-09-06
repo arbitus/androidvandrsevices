@@ -18,6 +18,10 @@ sealed class VarietyInfo(val name:Int) {
     data object Jicama:VarietyInfo(R.string.Jicama)
     data object Chirimoya:VarietyInfo(R.string.Chirimoya)
     data object Purple:VarietyInfo(R.string.Purple)
+    data object Jackfruit:VarietyInfo(R.string.Jackfruit)
+    data object Malanga:VarietyInfo(R.string.Malanga)
+    data object Papaya:VarietyInfo(R.string.Papaya)
+    data object Chayote:VarietyInfo(R.string.Chayote)
 }
 
 sealed class TypoImageLot(val name:String? = null){

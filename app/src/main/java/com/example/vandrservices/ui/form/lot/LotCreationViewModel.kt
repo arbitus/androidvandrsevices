@@ -36,7 +36,11 @@ class LotCreationViewModel @Inject constructor(private val addLotUseCase: AddLot
             VarietyInfo.Strawberrie,
             VarietyInfo.Raspberries,
             VarietyInfo.Tomato,
-            VarietyInfo.Peppers
+            VarietyInfo.Peppers,
+            VarietyInfo.Jackfruit,
+            VarietyInfo.Malanga,
+            VarietyInfo.Papaya,
+            VarietyInfo.Chayote
         )
     }
     fun addLot(lot: Lot) {

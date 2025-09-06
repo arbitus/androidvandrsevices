@@ -53,15 +53,238 @@ class PaletCreationFragment : Fragment() {
 
     // Campos por fruta
     private val fieldsByFruit = mapOf(
-        "Banana" to listOf("paletNumber","variety","packageSize","boxes","ageAtInspection","label","openAppearance","externalColor","cat","weight","pulpTemperature","packDate","gradeMaximum","gradeMinimum","lengthMaximum","lengthMinimum","c7_8","c8_9","c9_10","c10_11","c39","c40_49","c50","c2_dedos","c3_dedos","c4_dedos","c5_dedos","c6_dedos","c7_dedos","c8_dedos","c9_dedos","c10_dedos","c11_dedos"),
-        "Lemon" to listOf("paletNumber","variety","packageSize","traceability","boxes","pulpTemperature","label","countMin","countMax","openAppearance","externalColor","cat","weight","mixdSize"),
-        "Berrie" to listOf("paletNumber","variety","grower","packageSize","boxes","packDate","label","openAppearance","weight","pulpTemperature"),
-        "Blueberrie" to listOf("paletNumber","variety","grower","packageSize","boxes","packDate","label","openAppearance","weight","pulpTemperature","bloom"),
-        "Avocado" to listOf("paletNumber","variety","packageSize","boxes","packDate","label","pressurePSI","openAppearance","externalColor"),
-        "Mangoes" to listOf("paletNumber","variety","mixdSize","packageSize","boxes","packDate","cases","grower","label","openAppearance","groundColorGreen","groundColorTurning","groundColorYellow","blushAverage","cblush","firmnessHard","firmnessSensitive","firmnessSoft","plu","brix","count"),
-        "Peppers" to listOf("paletNumber","variety","packageSize","traceability","boxes","pulpTemperature","label","countMin","countMax","openAppearance","externalColor","cat","weight","mixdSize","count"),
-        "Raspberries" to listOf("paletNumber","variety","grower","packageSize","boxes","packDate","label","openAppearance","weight","pulpTemperature"),
-        "Tomato" to listOf("paletNumber","variety","packageSize","traceability","boxes","pulpTemperature","label","countMin","countMax","openAppearance","externalColor","cat","weight","mixdSize","count")
+        "Banana" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "boxes",
+            "ageAtInspection",
+            "label",
+            "openAppearance",
+            "externalColor",
+            "cat",
+            "weight",
+            "pulpTemperature",
+            "packDate",
+            "gradeMaximum",
+            "gradeMinimum",
+            "lengthMaximum",
+            "lengthMinimum",
+            "c7_8",
+            "c8_9",
+            "c9_10",
+            "c10_11",
+            "c39",
+            "c40_49",
+            "c50",
+            "c2_dedos",
+            "c3_dedos",
+            "c4_dedos",
+            "c5_dedos",
+            "c6_dedos",
+            "c7_dedos",
+            "c8_dedos",
+            "c9_dedos",
+            "c10_dedos",
+            "c11_dedos"
+        ),
+        "Lemon" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "traceability",
+            "boxes",
+            "pulpTemperature",
+            "label",
+            "countMin",
+            "countMax",
+            "openAppearance",
+            "externalColor",
+            "cat",
+            "weight",
+            "mixdSize"
+        ),
+        "Berrie" to listOf(
+            "paletNumber",
+            "variety",
+            "grower",
+            "packageSize",
+            "boxes",
+            "packDate",
+            "label",
+            "openAppearance",
+            "weight",
+            "pulpTemperature"
+        ),
+        "Blueberrie" to listOf(
+            "paletNumber",
+            "variety",
+            "grower",
+            "packageSize",
+            "boxes",
+            "packDate",
+            "label",
+            "openAppearance",
+            "weight",
+            "pulpTemperature",
+            "bloom"
+        ),
+        "Avocado" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "boxes",
+            "packDate",
+            "label",
+            "pressurePSI",
+            "openAppearance",
+            "externalColor"
+        ),
+        "Mangoes" to listOf(
+            "paletNumber",
+            "variety",
+            "mixdSize",
+            "packageSize",
+            "boxes",
+            "packDate",
+            "cases",
+            "grower",
+            "label",
+            "openAppearance",
+            "groundColorGreen",
+            "groundColorTurning",
+            "groundColorYellow",
+            "blushAverage",
+            "cblush",
+            "firmnessHard",
+            "firmnessSensitive",
+            "firmnessSoft",
+            "plu",
+            "brix",
+            "count"
+        ),
+        "Peppers" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "traceability",
+            "boxes",
+            "pulpTemperature",
+            "label",
+            "countMin",
+            "countMax",
+            "openAppearance",
+            "externalColor",
+            "cat",
+            "weight",
+            "mixdSize",
+            "count"
+        ),
+        "Raspberries" to listOf(
+            "paletNumber",
+            "variety",
+            "grower",
+            "packageSize",
+            "boxes",
+            "packDate",
+            "label",
+            "openAppearance",
+            "weight",
+            "pulpTemperature"
+        ),
+        "Tomato" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "traceability",
+            "boxes",
+            "pulpTemperature",
+            "label",
+            "countMin",
+            "countMax",
+            "openAppearance",
+            "externalColor",
+            "cat",
+            "weight",
+            "mixdSize",
+            "count"
+        ),
+        "Jackfruit" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "ageAtInspection",
+            "grower",
+            "traceability",
+            "sack",
+            "cases",
+            "label",
+            "pressurePSI",
+            "brix",
+            "openAppearance",
+            "internalColor",
+            "externalColor",
+            "count",
+            "cat",
+            "weight",
+            "mixdSize",
+            "pulpTemperature",
+            "packDate"
+        ),
+        "Malanga" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "ageAtInspection",
+            "traceability",
+            "boxes",
+            "sack",
+            "label",
+            "pressurePSI",
+            "brix",
+            "openAppearance",
+            "internalColor",
+            "externalColor",
+            "count",
+            "cat",
+            "weight",
+            "mixdSize",
+            "pulpTemperature"
+        ),
+        "Papaya" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "ageAtInspection",
+            "traceability",
+            "boxes",
+            "sack",
+            "label",
+            "pressurePSI",
+            "brix",
+            "openAppearance",
+            "internalColor",
+            "externalColor",
+            "count",
+            "cat",
+            "weight",
+            "mixdSize",
+            "pulpTemperature"
+        ),
+        "Chayote" to listOf(
+            "paletNumber",
+            "variety",
+            "packageSize",
+            "grower",
+            "boxes",
+            "traceability",
+            "label",
+            "count",
+            "cat",
+            "weight",
+            "mixdSize",
+            "openAppearance"
+        )
     )
 
     override fun onCreateView(
@@ -79,14 +302,27 @@ class PaletCreationFragment : Fragment() {
         val packDate = arguments?.getString("packDate") ?: ""
         val cases = arguments?.getString("cases") ?: "0"
         val label = arguments?.getString("label") ?: ""
-        Log.i("PaletCreationFragment", "variety: $variety, lotId: $lotId, localLotId: $localLotId, grower: $grower, packDate: $packDate, cases: $cases, label: $label")
+        Log.i(
+            "PaletCreationFragment",
+            "variety: $variety, lotId: $lotId, localLotId: $localLotId, grower: $grower, packDate: $packDate, cases: $cases, label: $label"
+        )
         viewModel.serLotPersist(variety, lotId, localLotId, grower, packDate, cases, label)
         val lotPersist = viewModel.getLotPersist()
 
-        setupForm(lotPersist["variety"] as String, lotPersist["grower"] as String, lotPersist["packDate"] as String, lotPersist["cases"] as String, lotPersist["label"] as String)
+        setupForm(
+            lotPersist["variety"] as String,
+            lotPersist["grower"] as String,
+            lotPersist["packDate"] as String,
+            lotPersist["cases"] as String,
+            lotPersist["label"] as String
+        )
 
         view.findViewById<Button>(R.id.btn_submit).setOnClickListener {
-            onSubmit(lotPersist["variety"] as String, lotPersist["lotId"] as Int, lotPersist["localLotId"] as String)
+            onSubmit(
+                lotPersist["variety"] as String,
+                lotPersist["lotId"] as Int,
+                lotPersist["localLotId"] as String
+            )
         }
 
         observePalets()
@@ -94,14 +330,24 @@ class PaletCreationFragment : Fragment() {
         return view
     }
 
-    private fun setupForm(variety: String, grower: String, packDate: String, cases: String, label: String) {
+    private fun setupForm(
+        variety: String,
+        grower: String,
+        packDate: String,
+        cases: String,
+        label: String
+    ) {
         containerLayout.removeAllViews()
         val fields = fieldsByFruit[variety] ?: emptyList()
-        val cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
+        val cornerRadius =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics)
 
         val imageView = ImageView(requireContext()).apply {
             setImageResource(R.drawable.ic_loogitpo)
-            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
                 .apply { gravity = Gravity.CENTER_HORIZONTAL; bottomMargin = 24 }
         }
         containerLayout.addView(imageView)
@@ -121,7 +367,10 @@ class PaletCreationFragment : Fragment() {
             null,
             com.google.android.material.R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox
         ).apply {
-            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
                 .apply { setMargins(16, 16, 16, 0) }
             boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
             setBoxCornerRadii(cornerRadius, cornerRadius, cornerRadius, cornerRadius)
@@ -129,9 +378,17 @@ class PaletCreationFragment : Fragment() {
         }
     }
 
-    private fun createEditText(field: String, grower: String, cases: String, label: String): TextInputEditText {
+    private fun createEditText(
+        field: String,
+        grower: String,
+        cases: String,
+        label: String
+    ): TextInputEditText {
         return TextInputEditText(requireContext()).apply {
-            layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            )
             inputType = getInputType(field)
             setInitialValue(this, field, grower, cases, label)
             if (field.contains("date", ignoreCase = true)) {
@@ -143,9 +400,36 @@ class PaletCreationFragment : Fragment() {
 
     private fun getInputType(field: String): Int {
         return when {
-            field.contains("count", ignoreCase = true) || field.contains("grower", ignoreCase = true) -> InputType.TYPE_CLASS_NUMBER
-            field.contains("boxes", ignoreCase = true) || field.contains("cases", ignoreCase = true) || field.contains("weight", ignoreCase = true) -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-            field.contains("mixdSize", ignoreCase = true) || field.contains("gradeMaximum", ignoreCase = true) || field.contains("gradeMinimum", ignoreCase = true) || field.contains("lengthMaximum", ignoreCase = true) || field.contains("lengthMinimum", ignoreCase = true) || field.contains("pulpTemperature", ignoreCase = true) -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+            field.contains("count", ignoreCase = true) || field.contains(
+                "grower",
+                ignoreCase = true
+            ) -> InputType.TYPE_CLASS_NUMBER
+
+            field.contains("boxes", ignoreCase = true) || field.contains(
+                "cases",
+                ignoreCase = true
+            ) || field.contains(
+                "weight",
+                ignoreCase = true
+            ) -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+
+            field.contains("mixdSize", ignoreCase = true) || field.contains(
+                "gradeMaximum",
+                ignoreCase = true
+            ) || field.contains(
+                "gradeMinimum",
+                ignoreCase = true
+            ) || field.contains(
+                "lengthMaximum",
+                ignoreCase = true
+            ) || field.contains(
+                "lengthMinimum",
+                ignoreCase = true
+            ) || field.contains(
+                "pulpTemperature",
+                ignoreCase = true
+            ) -> InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+
             field.contains("date", ignoreCase = true) -> InputType.TYPE_NULL
             else -> InputType.TYPE_CLASS_TEXT
         }
@@ -162,17 +446,21 @@ class PaletCreationFragment : Fragment() {
         when {
             field.equals("grower", ignoreCase = true) && growerInt != 0 ->
                 editText.setText(growerInt.toString())
+
             field.equals("cases", ignoreCase = true) && cases.toIntOrNull() != null ->
                 editText.setText(cases)
+
             field.contains("date", ignoreCase = true) ->
                 editText.setText(SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date()))
+
             field.equals("label", ignoreCase = true) && label.isNotEmpty() ->
                 editText.setText(label)
         }
     }
 
     private fun showDatePicker(editText: TextInputEditText) {
-        val picker = MaterialDatePicker.Builder.datePicker().setTitleText("Seleccionar fecha").build()
+        val picker =
+            MaterialDatePicker.Builder.datePicker().setTitleText("Seleccionar fecha").build()
         picker.show(parentFragmentManager, "datePicker")
         picker.addOnPositiveButtonClickListener { millis ->
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
@@ -181,7 +469,7 @@ class PaletCreationFragment : Fragment() {
     }
 
     private fun onSubmit(variety: String, lotId: Int, localLotId: String) {
-        val palet = buildPalet( variety, localLotId)
+        val palet = buildPalet(variety, localLotId)
         if (palet == null) {
             showFieldError("El número de palet es obligatorio")
             return
@@ -206,7 +494,8 @@ class PaletCreationFragment : Fragment() {
         } else {
             viewModel.savePalet(palet)
             showSuccessDialog(variety, palet.localId)
-            Toast.makeText(requireContext(), "Palet guardado correctamente", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "Palet guardado correctamente", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -360,7 +649,9 @@ class PaletCreationFragment : Fragment() {
         return outputFormat.format(parsedDate!!)
     }
 
-    private fun getText(field: String): String? = inputViews[field]?.text?.toString()?.trim().takeIf { !it.isNullOrEmpty() }
+    private fun getText(field: String): String? =
+        inputViews[field]?.text?.toString()?.trim().takeIf { !it.isNullOrEmpty() }
+
     private fun getInt(field: String): Int? = getText(field)?.toIntOrNull()
     private fun getDouble(field: String): Double? = getText(field)?.toDoubleOrNull()
 

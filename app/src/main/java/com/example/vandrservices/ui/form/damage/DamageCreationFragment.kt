@@ -155,6 +155,44 @@ class DamageCreationFragment : Fragment() {
             DamageField("Shrivel", DamageType.CONDITION),
             DamageField("Mold", DamageType.CONDITION),
             DamageField("Decay", DamageType.CONDITION)
+        ),
+        "Jackfruit" to listOf(
+            DamageField("Scars / Russet", DamageType.QUALITY),
+            DamageField("Broken", DamageType.QUALITY),
+            DamageField("Misshape", DamageType.QUALITY),
+            DamageField("Wounds", DamageType.CONDITION),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Insect Damage", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
+        ),
+        "Malanga" to listOf(
+            DamageField("Scars", DamageType.QUALITY),
+            DamageField("Skin Defects", DamageType.QUALITY),
+            DamageField("Wounds", DamageType.CONDITION),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Insect Damage", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
+        ),
+        "Papaya" to listOf(
+            DamageField("Scars", DamageType.QUALITY),
+            DamageField("Skin Defects", DamageType.QUALITY),
+            DamageField("Sunburn", DamageType.QUALITY),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Insect Damage", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
+        ),
+        "Chayote" to listOf(
+            DamageField("Scars / Russet", DamageType.QUALITY),
+            DamageField("Skin Defects", DamageType.QUALITY),
+            DamageField("Misshape", DamageType.QUALITY),
+            DamageField("Bruises", DamageType.CONDITION),
+            DamageField("Freeze Damage", DamageType.CONDITION),
+            DamageField("Insect Damage", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         )
     )
 

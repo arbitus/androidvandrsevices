@@ -64,5 +64,9 @@
     <string name="field_required">Field required</string>
     <string name="server_error">Server error</string>
     <string name="pick_a_date">Pick a date</string>
+    <string name="Jackfruit">Jackfruit</string>
+    <string name="Papaya">Papaya</string>
+    <string name="Malanga">Malanga</string>
+    <string name="Chayote">Chayote</string>
 
 </resources>
