@@ -193,6 +193,20 @@ class DamageCreationFragment : Fragment() {
             DamageField("Insect Damage", DamageType.CONDITION),
             DamageField("Mold", DamageType.CONDITION),
             DamageField("Decay", DamageType.CONDITION)
+        ),
+        "Watermelons" to listOf(
+            DamageField("Scars", DamageType.QUALITY),
+            DamageField("Skin Defects", DamageType.QUALITY),
+            DamageField("Misshape", DamageType.QUALITY),
+            DamageField("Hollow Heart", DamageType.QUALITY),
+            DamageField("Hail Damage", DamageType.QUALITY),
+            DamageField("Ground Spot", DamageType.QUALITY),
+            DamageField("Soft Fruit", DamageType.CONDITION),
+            DamageField("Overripe", DamageType.CONDITION),
+            DamageField("Leaking", DamageType.CONDITION),
+            DamageField("Bruises", DamageType.CONDITION),
+            DamageField("Mold", DamageType.CONDITION),
+            DamageField("Decay", DamageType.CONDITION)
         )
     )
 

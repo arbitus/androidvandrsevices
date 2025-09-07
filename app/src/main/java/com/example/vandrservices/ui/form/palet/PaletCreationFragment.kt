@@ -51,6 +51,17 @@ class PaletCreationFragment : Fragment() {
     private val inputViews = mutableMapOf<String, TextInputEditText>()
     private val userViewModel: LoginViewModel by activityViewModels()
 
+    private val generalPalet = listOf(
+        "paletNumber",
+        "variety",
+        "grower",
+        "packageSize",
+        "boxes",
+        "packDate",
+        "label",
+        "openAppearance",
+        "weight"
+    )
     // Campos por fruta
     private val fieldsByFruit = mapOf(
         "Banana" to listOf(
@@ -284,7 +295,39 @@ class PaletCreationFragment : Fragment() {
             "weight",
             "mixdSize",
             "openAppearance"
-        )
+        ),
+        "Watermelons" to generalPalet,
+        "Verdolaga" to generalPalet,
+        "Tuna" to generalPalet,
+        "Tomatillo" to generalPalet,
+        "Tejocote" to generalPalet,
+        "Rambutan" to generalPalet,
+        "Plantains" to generalPalet,
+        "Pitahaya" to generalPalet,
+        "Pera" to generalPalet,
+        "Pepino" to generalPalet,
+        "Papalo" to generalPalet,
+        "Nopal" to generalPalet,
+        "Naranja" to generalPalet,
+        "Melons" to generalPalet,
+        "Mangosteen" to generalPalet,
+        "Lettuce" to generalPalet,
+        "Hoja_Platano" to generalPalet,
+        "Guayaba" to generalPalet,
+        "Green_Onions" to generalPalet,
+        "Granada" to generalPalet,
+        "Garlic" to generalPalet,
+        "Garbanzo" to generalPalet,
+        "Esparrago" to generalPalet,
+        "Elote" to generalPalet,
+        "Cilantro" to generalPalet,
+        "Cauliflower" to generalPalet,
+        "Carrot" to generalPalet,
+        "Carambola" to generalPalet,
+        "Calabacita" to generalPalet,
+        "Brocoli" to generalPalet,
+        "Betabel" to generalPalet,
+        "Banana_Organic" to generalPalet
     )
 
     override fun onCreateView(
