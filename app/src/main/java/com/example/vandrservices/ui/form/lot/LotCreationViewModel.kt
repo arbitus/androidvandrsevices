@@ -66,6 +66,7 @@ class LotCreationViewModel @Inject constructor(
             VarietyInfo.Peppers,
             VarietyInfo.Pepino,
             VarietyInfo.Pera,
+            VarietyInfo.Pina,
             VarietyInfo.Pitahaya,
             VarietyInfo.Plantains,
             VarietyInfo.Purple,

@@ -30,7 +30,7 @@ sealed class VarietyInfo(val name:Int) {
     data object Rambutan:VarietyInfo(R.string.Rambutan)
     data object Plantains:VarietyInfo(R.string.Plantains)
     data object Pitahaya:VarietyInfo(R.string.Pitahaya)
-    data object Pina:VarietyInfo(R.string.Piña)
+    data object Pina:VarietyInfo(R.string.Pina)
     data object Pera:VarietyInfo(R.string.Pera)
     data object Pepino:VarietyInfo(R.string.Pepino)
     data object Papalo:VarietyInfo(R.string.Papalo)
