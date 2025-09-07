@@ -16,38 +16,77 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LotCreationViewModel @Inject constructor(private val addLotUseCase: AddLotUseCase, private val getLotsUseCase: GetLotsUseCase, private val savedStateHandle: SavedStateHandle) : ViewModel()  {
+class LotCreationViewModel @Inject constructor(
+    private val addLotUseCase: AddLotUseCase,
+    private val getLotsUseCase: GetLotsUseCase,
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
     private var _varietys = MutableStateFlow<List<VarietyInfo>>(emptyList())
     val varietys: StateFlow<List<VarietyInfo>> = _varietys
 
     init {
         _varietys.value = listOf(
-            VarietyInfo.Banana,
-            VarietyInfo.Coco,
-            VarietyInfo.Berrie,
-            VarietyInfo.Jicama,
-            VarietyInfo.Purple,
             VarietyInfo.Aloe_Vera,
             VarietyInfo.Avocado,
+            VarietyInfo.Banana,
+            VarietyInfo.Banana_Organic,
+            VarietyInfo.Berrie,
+            VarietyInfo.Betabel,
             VarietyInfo.Blueberrie,
+            VarietyInfo.Brocoli,
+            VarietyInfo.Calabacita,
+            VarietyInfo.Carambola,
+            VarietyInfo.Carrot,
+            VarietyInfo.Cauliflower,
+            VarietyInfo.Chayote,
             VarietyInfo.Chirimoya,
-            VarietyInfo.Lemon,
-            VarietyInfo.Mangoes,
-            VarietyInfo.Strawberrie,
-            VarietyInfo.Raspberries,
-            VarietyInfo.Tomato,
-            VarietyInfo.Peppers,
+            VarietyInfo.Cilantro,
+            VarietyInfo.Coco,
+            VarietyInfo.Elote,
+            VarietyInfo.Esparrago,
+            VarietyInfo.Garbanzo,
+            VarietyInfo.Garlic,
+            VarietyInfo.Granada,
+            VarietyInfo.Green_Onions,
+            VarietyInfo.Guayaba,
+            VarietyInfo.Hoja_Platano,
             VarietyInfo.Jackfruit,
+            VarietyInfo.Jicama,
+            VarietyInfo.Lemon,
+            VarietyInfo.Lettuce,
             VarietyInfo.Malanga,
+            VarietyInfo.Mangoes,
+            VarietyInfo.Mangosteen,
+            VarietyInfo.Melons,
+            VarietyInfo.Naranja,
+            VarietyInfo.Nopal,
+            VarietyInfo.Onions,
+            VarietyInfo.Papalo,
             VarietyInfo.Papaya,
-            VarietyInfo.Chayote
+            VarietyInfo.Peppers,
+            VarietyInfo.Pepino,
+            VarietyInfo.Pera,
+            VarietyInfo.Pitahaya,
+            VarietyInfo.Plantains,
+            VarietyInfo.Purple,
+            VarietyInfo.Rambutan,
+            VarietyInfo.Raspberries,
+            VarietyInfo.Strawberrie,
+            VarietyInfo.Tejocote,
+            VarietyInfo.Tomatillo,
+            VarietyInfo.Tomato,
+            VarietyInfo.Tuna,
+            VarietyInfo.Verdolaga,
+            VarietyInfo.Watermelons
         )
     }
+
     fun addLot(lot: Lot) {
         viewModelScope.launch {
             addLotUseCase(lot)
         }
     }
+
     val lots = getLotsUseCase()
         .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
