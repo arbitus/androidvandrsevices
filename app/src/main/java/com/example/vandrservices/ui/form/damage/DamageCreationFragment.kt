@@ -655,22 +655,51 @@ class DamageCreationFragment : Fragment() {
         var fruitName = arguments?.getString(ARG_FRUIT)
         val paletIdString = arguments?.getString("id")?: "0"
         var paletId = paletIdString.toIntOrNull()?: 0
-        viewModel.serPaletPersist(fruitName ?: "", paletId)
+        var lotIdString = arguments?.getString("lotId")?: ""
+        var lotId = lotIdString.toIntOrNull()?: 0
+        var localLotId = arguments?.getString("localLotId")?: ""
+        var grower = arguments?.getString("grower")?: ""
+        var packDate = arguments?.getString("packDate")?: ""
+        var cases = arguments?.getString("cases")?: ""
+        var label = arguments?.getString("label")?: ""
+        Log.i("DamageCreationFragment", "variety: $fruitName, lotId: $lotId, localLotId: $localLotId, grower: $grower, packDate: $packDate, cases: $cases, label: $label")
+
+        viewModel.serPaletPersist(fruitName ?: "", lotId ,paletId, localLotId, grower, cases, label)
         val resultPersist = viewModel.getPaletPersist()
-        fruitName = resultPersist.first
-        paletId = resultPersist.second ?: 0
+        fruitName = resultPersist["fruitName"].toString()
+        lotId = resultPersist["lotId"].toString().toIntOrNull() ?: 0
+        paletId = resultPersist["paletId"].toString().toIntOrNull() ?: 0
+        localLotId = resultPersist["localLotId"].toString()
+        grower = resultPersist["grower"].toString()
+        cases = resultPersist["cases"].toString()
+        label = resultPersist["label"].toString()
+
         val fields = fieldsByFruit[fruitName] ?: emptyList()
-        Log.i("fruit name", fields.toString())
-        Log.i("palet Id", paletId.toString())
 
         retrofit = RetrofitControles.getRetrofit()
+        val bundle = Bundle()
         createDynamicForm(fields)
         root.findViewById<Button>(R.id.btn_submit).setOnClickListener {
             val damages = readFormData()
             if (isInternetAvailable(requireContext())) {
-                saveDamage(damages, paletId)
+                bundle.putString("lotId", lotId.toString())
+                bundle.putString("localLotId", localLotId)
+                bundle.putString("grower", grower)
+                bundle.putString("cases", cases)
+                bundle.putString("label", label)
+                bundle.putString("variety", fruitName)
+                saveDamage(damages, paletId, bundle)
             }else{
-                saveDamageLocal(damages, paletId)
+
+
+                bundle.putString("lotId", lotId.toString())
+                bundle.putString("localLotId", localLotId)
+                bundle.putString("grower", grower)
+                bundle.putString("packDate", packDate)
+                bundle.putString("cases", cases)
+                bundle.putString("label", label)
+                bundle.putString("variety", fruitName)
+                saveDamageLocal(damages, paletId, bundle)
             }
             observeDamages()
         }
@@ -752,7 +781,7 @@ class DamageCreationFragment : Fragment() {
 
         return result
     }
-    private fun saveDamage(damageList: List<Triple<String, String, Double>>, paletId: Int) {
+    private fun saveDamage(damageList: List<Triple<String, String, Double>>, paletId: Int, bundle: Bundle) {
         lifecycleScope.launch {
             val user: User? = userViewModel.usersFlow.firstOrNull()?.firstOrNull()
             val token = user?.token
@@ -777,12 +806,12 @@ class DamageCreationFragment : Fragment() {
                     .setMessage("Los Damage se han guardado con éxito.")
                     .setPositiveButton("Aceptar") { dialog, _ ->
                         dialog.dismiss()
-                        findNavController().navigate(R.id.CompanySelectFragment)
+                        findNavController().navigate(R.id.beforeReportFragment, bundle)
                     }.show()
             }
         }
     }
-    private fun saveDamageLocal(damageList: List<Triple<String, String, Double>>, paletId: Int) {
+    private fun saveDamageLocal(damageList: List<Triple<String, String, Double>>, paletId: Int, bundle: Bundle) {
         for (damage in damageList) {
             val damageToSave = Damage(
                 localId = "${UUID.randomUUID()}",
@@ -793,8 +822,14 @@ class DamageCreationFragment : Fragment() {
             )
 
             viewModel.saveDamage(damageToSave)
-
         }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Damages guardado")
+            .setMessage("Los Damage se han guardado con éxito.")
+            .setPositiveButton("Aceptar") { dialog, _ ->
+                dialog.dismiss()
+                findNavController().navigate(R.id.beforeReportFragment, bundle)
+            }.show()
     }
 
     private fun observeDamages() {

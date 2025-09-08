@@ -347,7 +347,7 @@ class PaletCreationFragment : Fragment() {
         val label = arguments?.getString("label") ?: ""
         Log.i(
             "PaletCreationFragment",
-            "variety: $variety, lotId: $lotId, localLotId: $localLotId, grower: $grower, packDate: $packDate, cases: $cases, label: $label"
+            "variety: $variety, lotId: $lotId, localLotId: $localLotId, grower: $grower, cases: $cases, label: $label"
         )
         viewModel.serLotPersist(variety, lotId, localLotId, grower, packDate, cases, label)
         val lotPersist = viewModel.getLotPersist()
@@ -364,7 +364,11 @@ class PaletCreationFragment : Fragment() {
             onSubmit(
                 lotPersist["variety"] as String,
                 lotPersist["lotId"] as Int,
-                lotPersist["localLotId"] as String
+                lotPersist["localLotId"] as String,
+                lotPersist["grower"] as String,
+                lotPersist["cases"] as String,
+                lotPersist["label"] as String
+
             )
         }
 
@@ -511,7 +515,7 @@ class PaletCreationFragment : Fragment() {
         }
     }
 
-    private fun onSubmit(variety: String, lotId: Int, localLotId: String) {
+    private fun onSubmit(variety: String, lotId: Int, localLotId: String, grower: String, cases: String, label: String) {
         val palet = buildPalet(variety, localLotId)
         if (palet == null) {
             showFieldError("El número de palet es obligatorio")
@@ -528,7 +532,7 @@ class PaletCreationFragment : Fragment() {
                     if (responsePalet.isSuccessful) {
                         val paletId = responsePalet.body()?.id ?: 0
                         Log.i("PaletFragment", "Palet creado con ID: $paletId")
-                        showSuccessDialog(variety, paletId)
+                        showSuccessDialog(variety, paletId, lotId, localLotId, grower, cases, label)
                     } else {
                         showFieldError("Error al enviar palet: ${responsePalet.code()}")
                     }
@@ -536,7 +540,7 @@ class PaletCreationFragment : Fragment() {
             }
         } else {
             viewModel.savePalet(palet)
-            showSuccessDialog(variety, palet.localId)
+            showSuccessDialog(variety, palet.localId, lotId, localLotId, grower, cases, label)
             Toast.makeText(requireContext(), "Palet guardado correctamente", Toast.LENGTH_SHORT)
                 .show()
         }
@@ -545,7 +549,7 @@ class PaletCreationFragment : Fragment() {
     private fun buildPalet(variety: String, localLotId: String): Palet? {
         val paletNumber = getText("paletNumber") ?: return null
         return Palet(
-            localId = UUID.randomUUID().toString(),
+            localId = (0..Int.MAX_VALUE).random().toString(),
             lotId = localLotId,
             paletNumber = paletNumber,
             variedad = variety,
@@ -702,8 +706,17 @@ class PaletCreationFragment : Fragment() {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun showSuccessDialog(variety: String, paletId: Any) {
-        val bundle = bundleOf("variety" to variety, "id" to paletId.toString())
+    private fun showSuccessDialog(variety: String, paletId: Any, lotId: Int, localLotId: String, grower: String, cases: String, label: String) {
+        val bundle = bundleOf(
+            "variety" to variety,
+            "id" to paletId.toString(),
+            "lotId" to lotId.toString(),
+            "localLotId" to localLotId,
+            "grower" to grower,
+            "packDate" to "",
+            "cases" to cases,
+            "label" to label
+        )
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Palet guardado")
             .setMessage("El palet se ha guardado con éxito.")

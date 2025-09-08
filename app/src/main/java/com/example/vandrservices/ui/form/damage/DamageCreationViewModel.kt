@@ -30,15 +30,31 @@ class DamageCreationViewModel @Inject constructor(
 
     fun serPaletPersist(
         fruitName: String,
-        paletId: Int
+        lotId: Int,
+        paletId: Int,
+        localLotId : String,
+        grower: String,
+        cases: String,
+        label: String
     ) {
         savedStateHandle["fruitName"] = fruitName
+        savedStateHandle["lotId"] = lotId
         savedStateHandle["paletId"] = paletId
+        savedStateHandle["localLotId"] = localLotId
+        savedStateHandle["grower"] = grower
+        savedStateHandle["cases"] = cases
+        savedStateHandle["label"] = label
     }
 
-    fun getPaletPersist(): Pair<String?, Int?> {
-        val fruitName = savedStateHandle.get<String>("fruitName")
-        val paletId = savedStateHandle.get<Int>("paletId")
-        return Pair(fruitName, paletId)
+    fun getPaletPersist(): Map<String, Any?> {
+        return mapOf(
+            "fruitName" to savedStateHandle.get<String>("fruitName"),
+            "lotId" to savedStateHandle.get<Int>("lotId"),
+            "paletId" to savedStateHandle.get<Int>("paletId"),
+            "localLotId" to savedStateHandle.get<Int>("localLotId"),
+            "grower" to savedStateHandle.get<String>("grower"),
+            "cases" to savedStateHandle.get<String>("cases"),
+            "label" to savedStateHandle.get<String>("label")
+        )
     }
 }

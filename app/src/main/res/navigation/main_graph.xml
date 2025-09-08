@@ -40,4 +40,9 @@
         android:id="@+id/paletImagesFragment"
         android:name="com.example.vandrservices.ui.form.palet.PaletImagesFragment"
         android:label="PaletImagesFragment" />
+    <fragment
+        android:id="@+id/beforeReportFragment"
+        android:name="com.example.vandrservices.ui.form.BeforeReport.BeforeReportFragment"
+        android:label="fragment_before_report"
+        tools:layout="@layout/fragment_before_report" />
 </navigation>
