@@ -75,6 +75,9 @@ class BeforeReportFragment : Fragment() {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             view.context.startActivity(intent)
         }
+        view.findViewById<Button>(R.id.btn_new_report).setOnClickListener {
+            findNavController().navigate(R.id.CompanySelectFragment)
+        }
         view.findViewById<Button>(R.id.btn_download).setOnClickListener {
             val id = lotPersist["lotId"]
             val url = "https://vandservices-af6ea8b693af.herokuapp.com/generate_pdf_strawberrie/?id=$id"
