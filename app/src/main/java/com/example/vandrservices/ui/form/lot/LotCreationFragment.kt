@@ -25,6 +25,7 @@ import com.example.vandrservices.databinding.FragmentLotCreationBinding
 import com.example.vandrservices.domain.model.Lot
 import com.example.vandrservices.domain.model.LotToJson
 import com.example.vandrservices.domain.model.User
+import com.example.vandrservices.domain.model.VarietyInfo
 import com.example.vandrservices.ui.form.Util.getLotAutofill
 import com.example.vandrservices.ui.form.isInternetAvailable
 import com.example.vandrservices.ui.login.LoginViewModel
@@ -228,16 +229,20 @@ class LotCreationFragment : Fragment() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 lotCreateViewModel.varietys.collect { varieties ->
+                    val displayNames = varieties.map { it.getDisplayName(requireContext()) }
                     val adapter = ArrayAdapter(
                         requireContext(),
                         android.R.layout.simple_dropdown_item_1line,
-                        varieties
+                        displayNames
                     )
                     binding.dropdown.setAdapter(adapter)
                     binding.dropdown.setOnClickListener { binding.dropdown.showDropDown() }
                 }
             }
         }
+    }
+    private fun VarietyInfo.getDisplayName(context: Context): String {
+        return context.getString(this.name)
     }
 
     override fun onDestroyView() {
